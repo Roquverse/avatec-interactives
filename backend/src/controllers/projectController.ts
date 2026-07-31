@@ -53,7 +53,7 @@ export const getProject = async (req: Request<{ id: string }>, res: Response) =>
 
 export const createProject = async (req: Request, res: Response) => {
   try {
-    const { name, description, status, clientId, imageUrl, websiteUrl, tags, companyName, country, category, projectInfo, challenges, outcome, scopeOfWork, gallery } = req.body;
+    const { name, description, status, clientId, imageUrl, websiteUrl, tags, companyName, country, category, projectInfo, challenges, outcome, scopeOfWork, gallery, projectType, industry, platform } = req.body;
     const project = await prisma.project.create({
       data: {
         name,
@@ -71,6 +71,9 @@ export const createProject = async (req: Request, res: Response) => {
         outcome,
         scopeOfWork,
         gallery: gallery || [],
+        projectType,
+        industry,
+        platform,
       },
     });
 
@@ -84,7 +87,7 @@ export const createProject = async (req: Request, res: Response) => {
 export const updateProject = async (req: Request<{ id: string }>, res: Response) => {
   try {
     const { id } = req.params;
-    const { name, description, status, clientId, imageUrl, websiteUrl, tags, companyName, country, category, projectInfo, challenges, outcome, scopeOfWork, gallery } = req.body;
+    const { name, description, status, clientId, imageUrl, websiteUrl, tags, companyName, country, category, projectInfo, challenges, outcome, scopeOfWork, gallery, projectType, industry, platform } = req.body;
     const project = await prisma.project.update({
       where: { id },
       data: {
@@ -103,6 +106,9 @@ export const updateProject = async (req: Request<{ id: string }>, res: Response)
         outcome,
         scopeOfWork,
         gallery: gallery || [],
+        projectType,
+        industry,
+        platform,
       },
     });
 

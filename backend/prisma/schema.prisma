@@ -43,6 +43,9 @@ model Project {
   outcome     String?
   scopeOfWork String?
   gallery     String[]
+  projectType String?
+  industry    String?
+  platform    String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }

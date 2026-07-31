@@ -18,6 +18,9 @@ type Project = {
   scopeOfWork?: string;
   gallery?: string[];
   status?: string;
+  projectType?: string;
+  industry?: string;
+  platform?: string;
 };
 
 export default function ProjectDetail() {
@@ -110,6 +113,27 @@ export default function ProjectDetail() {
                 {project.projectInfo}
               </p>
               
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 20 }}>
+                {project.industry && (
+                  <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: 24, padding: 24 }}>
+                    <h4 style={{ fontFamily: 'Outfit', fontWeight: 600, fontSize: 12, letterSpacing: 2, color: '#a3a3a3', textTransform: 'uppercase', marginBottom: 8 }}>Industry</h4>
+                    <div style={{ fontSize: 18, color: 'white', fontFamily: 'Inter', fontWeight: 500 }}>{project.industry}</div>
+                  </div>
+                )}
+                {project.platform && (
+                  <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: 24, padding: 24 }}>
+                    <h4 style={{ fontFamily: 'Outfit', fontWeight: 600, fontSize: 12, letterSpacing: 2, color: '#a3a3a3', textTransform: 'uppercase', marginBottom: 8 }}>Platform</h4>
+                    <div style={{ fontSize: 18, color: 'white', fontFamily: 'Inter', fontWeight: 500 }}>{project.platform}</div>
+                  </div>
+                )}
+                {project.projectType && (
+                  <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: 24, padding: 24 }}>
+                    <h4 style={{ fontFamily: 'Outfit', fontWeight: 600, fontSize: 12, letterSpacing: 2, color: '#a3a3a3', textTransform: 'uppercase', marginBottom: 8 }}>Type</h4>
+                    <div style={{ fontSize: 18, color: 'white', fontFamily: 'Inter', fontWeight: 500 }}>{project.projectType}</div>
+                  </div>
+                )}
+              </div>
+
               <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: 24, padding: 32 }}>
                 <h4 style={{ fontFamily: 'Outfit', fontWeight: 600, fontSize: 14, letterSpacing: 2, color: 'white', textTransform: 'uppercase', marginBottom: 24 }}>Services</h4>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>

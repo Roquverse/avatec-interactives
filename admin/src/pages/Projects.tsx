@@ -18,6 +18,9 @@ const Projects = () => {
     imageUrl: '',
     websiteUrl: '',
     tags: '',
+    projectType: '',
+    industry: '',
+    platform: '',
     projectInfo: '',
     challenges: '',
     outcome: '',
@@ -87,7 +90,7 @@ const Projects = () => {
       setEditingId(null);
       setImageFile(null);
       setFormData({
-        name: '', description: '', status: 'ACTIVE', imageUrl: '', websiteUrl: '', tags: '', projectInfo: '', challenges: '', outcome: '', scopeOfWork: '', gallery: ''
+        name: '', description: '', status: 'ACTIVE', imageUrl: '', websiteUrl: '', tags: '', projectType: '', industry: '', platform: '', projectInfo: '', challenges: '', outcome: '', scopeOfWork: '', gallery: ''
       });
       await fetchProjects();
     } catch (error) {
@@ -106,6 +109,9 @@ const Projects = () => {
       imageUrl: project.imageUrl || '',
       websiteUrl: project.websiteUrl || '',
       tags: project.tags ? project.tags.join(', ') : '',
+      projectType: project.projectType || '',
+      industry: project.industry || '',
+      platform: project.platform || '',
       projectInfo: project.projectInfo || '',
       challenges: project.challenges || '',
       outcome: project.outcome || '',
@@ -152,7 +158,7 @@ const Projects = () => {
             setEditingId(null);
             setImageFile(null);
             setFormData({
-              name: '', description: '', status: 'ACTIVE', imageUrl: '', websiteUrl: '', tags: '', projectInfo: '', challenges: '', outcome: '', scopeOfWork: '', gallery: ''
+              name: '', description: '', status: 'ACTIVE', imageUrl: '', websiteUrl: '', tags: '', projectType: '', industry: '', platform: '', projectInfo: '', challenges: '', outcome: '', scopeOfWork: '', gallery: ''
             });
             setShowModal(true);
           }}
@@ -317,6 +323,42 @@ const Projects = () => {
                   onChange={handleInputChange}
                   style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', resize: 'vertical' }}
                 />
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem' }}>
+                <div>
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Project Type</label>
+                  <input 
+                    type="text" 
+                    name="projectType" 
+                    placeholder="e.g. B2B Platform"
+                    value={formData.projectType}
+                    onChange={handleInputChange}
+                    style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
+                  />
+                </div>
+                <div>
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Industry</label>
+                  <input 
+                    type="text" 
+                    name="industry" 
+                    placeholder="e.g. Fintech"
+                    value={formData.industry}
+                    onChange={handleInputChange}
+                    style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
+                  />
+                </div>
+                <div>
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Platform</label>
+                  <input 
+                    type="text" 
+                    name="platform" 
+                    placeholder="e.g. Web & API"
+                    value={formData.platform}
+                    onChange={handleInputChange}
+                    style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
+                  />
+                </div>
               </div>
 
               <div>
