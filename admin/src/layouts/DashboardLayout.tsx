@@ -1,8 +1,7 @@
-import { Outlet, NavLink, useNavigate } from 'react-router-dom';
+import { Outlet, NavLink } from 'react-router-dom';
 import { LayoutDashboard, FolderKanban, Users, Settings, Plus, BookOpen, Search, Menu, MessageSquare, Receipt, CalendarDays } from 'lucide-react';
 
 const DashboardLayout = () => {
-  const navigate = useNavigate();
 
   return (
     <div className="app-container">
@@ -11,22 +10,22 @@ const DashboardLayout = () => {
         <div className="sidebar-logo">INI</div>
 
         <nav className="nav-menu">
-          <NavLink to="/" end className={({ isActive }) => \`nav-icon \${isActive ? 'active' : ''}\`} title="Overview">
+          <NavLink to="/" end className={({ isActive }) => "nav-icon " + (isActive ? 'active' : '')} title="Overview">
             <LayoutDashboard size={20} />
           </NavLink>
-          <NavLink to="/projects" className={({ isActive }) => \`nav-icon \${isActive ? 'active' : ''}\`} title="Projects">
+          <NavLink to="/projects" className={({ isActive }) => "nav-icon " + (isActive ? 'active' : '')} title="Projects">
             <FolderKanban size={20} />
           </NavLink>
-          <NavLink to="/portfolio" className={({ isActive }) => \`nav-icon \${isActive ? 'active' : ''}\`} title="Portfolio">
+          <NavLink to="/portfolio" className={({ isActive }) => "nav-icon " + (isActive ? 'active' : '')} title="Portfolio">
             <Users size={20} />
           </NavLink>
-          <NavLink to="/insights" className={({ isActive }) => \`nav-icon \${isActive ? 'active' : ''}\`} title="Insights">
+          <NavLink to="/insights" className={({ isActive }) => "nav-icon " + (isActive ? 'active' : '')} title="Insights">
             <BookOpen size={20} />
           </NavLink>
-          <NavLink to="/invoices" className={({ isActive }) => \`nav-icon \${isActive ? 'active' : ''}\`} title="Invoices">
+          <NavLink to="/invoices" className={({ isActive }) => "nav-icon " + (isActive ? 'active' : '')} title="Invoices">
             <Receipt size={20} />
           </NavLink>
-          <NavLink to="/schedule" className={({ isActive }) => \`nav-icon \${isActive ? 'active' : ''}\`} title="Schedule">
+          <NavLink to="/schedule" className={({ isActive }) => "nav-icon " + (isActive ? 'active' : '')} title="Schedule">
             <CalendarDays size={20} />
           </NavLink>
           <div className="nav-icon" title="Settings" style={{ marginTop: 'auto' }}>

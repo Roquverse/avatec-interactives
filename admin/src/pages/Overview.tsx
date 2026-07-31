@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { ChevronDown, SlidersHorizontal, MoreHorizontal } from 'lucide-react';
 
 const Overview = () => {
@@ -75,7 +75,7 @@ const Overview = () => {
               {/* Mock Dot Matrix */}
               <div className="dot-matrix">
                 {[...Array(48)].map((_, i) => (
-                  <div key={i} className={\`matrix-dot \${i % 7 === 0 ? 'green' : i % 5 === 0 ? 'orange' : i % 11 === 0 ? 'white' : ''}\`}></div>
+                  <div key={i} className={"matrix-dot " + (i % 7 === 0 ? 'green' : i % 5 === 0 ? 'orange' : i % 11 === 0 ? 'white' : '')}></div>
                 ))}
               </div>
             </div>
@@ -102,11 +102,11 @@ const Overview = () => {
                 { val1: 36, val2: 72, color: 'white' },
               ].map((pill, i) => (
                 <div className="pill-bar-container" key={i}>
-                  <div className={\`pill-bar \${pill.color === 'white' ? 'pill-white' : pill.color === 'green' ? 'pill-green' : 'pill-orange'}\`} style={{ height: \`\${Math.max(pill.val1, pill.val2)}px\` }}>
+                  <div className={"pill-bar " + (pill.color === 'white' ? 'pill-white' : pill.color === 'green' ? 'pill-green' : 'pill-orange')} style={{ height: Math.max(pill.val1, pill.val2) + 'px' }}>
                     {pill.val1}
                   </div>
                   <div className="pill-dot"></div>
-                  <div className={\`pill-bar \${pill.color === 'white' ? 'pill-orange' : pill.color === 'green' ? 'pill-white' : 'pill-green'}\`} style={{ height: \`\${Math.min(pill.val1, pill.val2)}px\` }}>
+                  <div className={"pill-bar " + (pill.color === 'white' ? 'pill-orange' : pill.color === 'green' ? 'pill-white' : 'pill-green')} style={{ height: Math.min(pill.val1, pill.val2) + 'px' }}>
                     {pill.val2}
                   </div>
                 </div>
