@@ -120,6 +120,7 @@ export default function Projects() {
   const getColumns = () => {
     return [
       { id: 'PLANNED', title: 'Planned' },
+      { id: 'EDIT', title: 'Edit' },
       { id: 'ACTIVE', title: 'Active' },
       { id: 'COMPLETED', title: 'Completed' }
     ];
@@ -171,7 +172,7 @@ export default function Projects() {
                       {project.tasks?.filter((t:any) => t.status === 'DONE').length || 0} / {project.tasks?.length || 0}
                     </div>
                     {project.isPortfolio && (
-                      <span style={{ color: '#a3e635', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <span style={{ color: '#ab0924', display: 'flex', alignItems: 'center', gap: '4px' }}>
                         <Globe size={12} /> Published
                       </span>
                     )}
@@ -200,6 +201,7 @@ export default function Projects() {
                   style={{ background: 'rgba(255,255,255,0.1)', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '8px', outline: 'none' }}
                 >
                   <option value="PLANNED">Planned</option>
+                  <option value="EDIT">Edit</option>
                   <option value="ACTIVE">Active</option>
                   <option value="COMPLETED">Completed</option>
                 </select>
@@ -212,7 +214,7 @@ export default function Projects() {
               {/* Left Column: Tasks */}
               <div>
                 <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'white', fontSize: '18px', marginTop: 0, marginBottom: '24px' }}>
-                  <CheckSquare size={20} color="#a3e635" /> Tasks
+                  <CheckSquare size={20} color="#ab0924" /> Tasks
                 </h3>
                 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px' }}>
@@ -220,7 +222,7 @@ export default function Projects() {
                     <div key={task.id} style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'rgba(0,0,0,0.2)', padding: '12px 16px', borderRadius: '8px' }}>
                       <div 
                         onClick={() => toggleTask(task.id, task.status)}
-                        style={{ cursor: 'pointer', color: task.status === 'DONE' ? '#a3e635' : '#555' }}
+                        style={{ cursor: 'pointer', color: task.status === 'DONE' ? '#ab0924' : '#555' }}
                       >
                         {task.status === 'DONE' ? <CheckCircle size={20} /> : <div style={{ width: 18, height: 18, border: '2px solid #555', borderRadius: '4px' }} />}
                       </div>
@@ -251,20 +253,20 @@ export default function Projects() {
                 
                 {/* Publish to Portfolio */}
                 {selectedProject.status === 'COMPLETED' && !selectedProject.isPortfolio && (
-                  <div style={{ background: 'rgba(163, 230, 53, 0.1)', border: '1px solid rgba(163, 230, 53, 0.2)', padding: '20px', borderRadius: '12px', textAlign: 'center' }}>
-                    <Globe size={32} color="#a3e635" style={{ marginBottom: 12 }} />
-                    <h4 style={{ margin: '0 0 8px 0', color: 'white' }}>Publish Case Study</h4>
+                  <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '16px', padding: '24px', textAlign: 'center' }}>
+                    <Globe size={32} color="#ab0924" style={{ marginBottom: 12 }} />
+                    <h4 style={{ margin: '0 0 8px 0', color: 'white', fontSize: '16px' }}>Publish to Portfolio</h4>
                     <p style={{ margin: '0 0 16px 0', fontSize: '13px', color: '#a3a3a3' }}>Make this project visible on the public portfolio.</p>
                     <button 
                       onClick={() => handlePublishPortfolio(selectedProject.id)}
-                      style={{ background: '#a3e635', color: 'black', border: 'none', padding: '10px 16px', borderRadius: '8px', width: '100%', fontWeight: 600, cursor: 'pointer' }}
+                      style={{ background: '#ab0924', color: 'white', border: 'none', padding: '10px 16px', borderRadius: '8px', width: '100%', fontWeight: 600, cursor: 'pointer' }}
                     >
                       Publish Now
                     </button>
                   </div>
                 )}
                 {selectedProject.isPortfolio && (
-                  <div style={{ background: 'rgba(255,255,255,0.05)', padding: '16px', borderRadius: '12px', textAlign: 'center', color: '#a3e635', fontSize: '14px', fontWeight: 500 }}>
+                  <div style={{ background: 'rgba(255,255,255,0.05)', padding: '16px', borderRadius: '12px', textAlign: 'center', color: '#ab0924', fontSize: '14px', fontWeight: 500 }}>
                     <Globe size={16} style={{ verticalAlign: 'text-bottom', marginRight: 8 }} />
                     Published to Portfolio
                   </div>

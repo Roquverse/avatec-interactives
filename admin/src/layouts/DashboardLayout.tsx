@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Outlet, NavLink } from 'react-router-dom';
-import { LayoutDashboard, FolderKanban, Users, Settings, Plus, BookOpen, Search, Receipt, CalendarDays } from 'lucide-react';
+import { LayoutDashboard, FolderKanban, Users, Globe, Settings, Plus, BookOpen, Search, Receipt, CalendarDays } from 'lucide-react';
 
 const DashboardLayout = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -21,8 +21,11 @@ const DashboardLayout = () => {
           <NavLink to="/projects" className={({ isActive }) => "nav-icon " + (isActive ? 'active' : '')} title="Projects">
             <FolderKanban size={20} />
           </NavLink>
-          <NavLink to="/portfolio" className={({ isActive }) => "nav-icon " + (isActive ? 'active' : '')} title="Portfolio">
+          <NavLink to="/clients" className={({ isActive }) => "nav-icon " + (isActive ? 'active' : '')} title="Clients">
             <Users size={20} />
+          </NavLink>
+          <NavLink to="/portfolio" className={({ isActive }) => "nav-icon " + (isActive ? 'active' : '')} title="Portfolio">
+            <Globe size={20} />
           </NavLink>
           <NavLink to="/insights" className={({ isActive }) => "nav-icon " + (isActive ? 'active' : '')} title="Insights">
             <BookOpen size={20} />
@@ -77,7 +80,7 @@ const DashboardLayout = () => {
                 <div className="user-name">Admin User</div>
                 <div className="user-handle">@admin</div>
               </div>
-              <div className="user-avatar" style={{ backgroundImage: 'url(https://ui-avatars.com/api/?name=Admin+User&background=a3e635&color=121318)', backgroundSize: 'cover' }}></div>
+              <div className="user-avatar" style={{ backgroundImage: 'url(https://ui-avatars.com/api/?name=Admin+User&background=ab0924&color=121318)', backgroundSize: 'cover' }}></div>
             </div>
           </div>
         </header>
