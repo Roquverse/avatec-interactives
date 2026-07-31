@@ -36,9 +36,9 @@ const DashboardLayout = () => {
           <NavLink to="/schedule" className={({ isActive }) => "nav-icon " + (isActive ? 'active' : '')} title="Schedule">
             <CalendarDays size={20} />
           </NavLink>
-          <div className="nav-icon" title="Settings" style={{ marginTop: 'auto' }}>
+          <NavLink to="/settings" className={({ isActive }) => "nav-icon " + (isActive ? 'active' : '')} title="Settings" style={{ marginTop: 'auto' }}>
             <Settings size={20} />
-          </div>
+          </NavLink>
         </nav>
         
         <button className="add-btn">
