@@ -82,7 +82,7 @@ export default function FeaturedWork() {
       try {
         const configuredUrl = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
         const apiUrl = configuredUrl.endsWith('/api') ? configuredUrl : `${configuredUrl.replace(/\/$/, '')}/api`;
-        const response = await fetch(`${apiUrl}/projects`);
+        const response = await fetch(`${apiUrl}/projects?portfolio=true`);
         if (response.ok) {
           const data = await response.json();
           setProjects(data);

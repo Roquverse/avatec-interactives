@@ -1,514 +1,312 @@
 import React, { useEffect, useState } from 'react';
 import api from '../api/client';
-import { Plus, X, ExternalLink, Image as ImageIcon, Pencil, Trash2 } from 'lucide-react';
+import { Plus, Users, CheckSquare, Trash2, CheckCircle, Globe } from 'lucide-react';
 
-const Projects = () => {
-  const [projects, setProjects] = useState([]);
+export default function Projects() {
+  const [projects, setProjects] = useState<any[]>([]);
+  const [clients, setClients] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [imageFile, setImageFile] = useState<File | null>(null);
 
-  // Form State
-  const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    status: 'ACTIVE',
-    imageUrl: '',
-    websiteUrl: '',
-    tags: '',
-    projectType: '',
-    industry: '',
-    platform: '',
-    projectInfo: '',
-    challenges: '',
-    outcome: '',
-    scopeOfWork: '',
-    gallery: ''
-  });
+  // Modal states
+  const [selectedProject, setSelectedProject] = useState<any>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newTaskTitle, setNewTaskTitle] = useState('');
 
-  const fetchProjects = async () => {
+  // Fetch data
+  const fetchData = async () => {
     try {
-      const response = await api.get('/projects');
-      setProjects(response.data);
+      setLoading(true);
+      const [projRes, clientRes] = await Promise.all([
+        api.get('/projects'),
+        api.get('/clients')
+      ]);
+      setProjects(projRes.data);
+      setClients(clientRes.data);
     } catch (error) {
-      console.error('Error fetching projects:', error);
+      console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchProjects();
+    fetchData();
   }, []);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitting(true);
+  const handleUpdateStatus = async (id: string, status: string) => {
     try {
-      const tagsArray = formData.tags
-        ? formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0)
-        : [];
-      const galleryArray = formData.gallery
-        ? formData.gallery.split(',').map(url => url.trim()).filter(url => url.length > 0)
-        : [];
-
-      let finalImageUrl = formData.imageUrl;
-      if (imageFile) {
-        const uploadData = new FormData();
-        uploadData.append('image', imageFile);
-        const uploadRes = await api.post('/upload', uploadData, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        });
-        finalImageUrl = uploadRes.data.imageUrl;
-      }
-
-      if (editingId) {
-        await api.put(`/projects/${editingId}`, {
-          ...formData,
-          imageUrl: finalImageUrl,
-          tags: tagsArray,
-          gallery: galleryArray,
-        });
-      } else {
-        await api.post('/projects', {
-          ...formData,
-          imageUrl: finalImageUrl,
-          tags: tagsArray,
-          gallery: galleryArray,
-          clientId: null
-        });
-      }
-      
-      setShowModal(false);
-      setEditingId(null);
-      setImageFile(null);
-      setFormData({
-        name: '', description: '', status: 'ACTIVE', imageUrl: '', websiteUrl: '', tags: '', projectType: '', industry: '', platform: '', projectInfo: '', challenges: '', outcome: '', scopeOfWork: '', gallery: ''
-      });
-      await fetchProjects();
+      await api.put(`/projects/${id}`, { status });
+      fetchData();
     } catch (error) {
-      console.error('Error saving project:', error);
-      alert('Failed to save project');
-    } finally {
-      setSubmitting(false);
+      console.error('Error updating status:', error);
     }
   };
 
-  const handleEdit = (project: any) => {
-    setFormData({
-      name: project.name || '',
-      description: project.description || '',
-      status: project.status || 'ACTIVE',
-      imageUrl: project.imageUrl || '',
-      websiteUrl: project.websiteUrl || '',
-      tags: project.tags ? project.tags.join(', ') : '',
-      projectType: project.projectType || '',
-      industry: project.industry || '',
-      platform: project.platform || '',
-      projectInfo: project.projectInfo || '',
-      challenges: project.challenges || '',
-      outcome: project.outcome || '',
-      scopeOfWork: project.scopeOfWork || '',
-      gallery: project.gallery ? project.gallery.join(', ') : ''
-    });
-    setEditingId(project.id);
-    setImageFile(null);
-    setShowModal(true);
-  };
-
-  const handleDelete = async (id: string) => {
-    if (window.confirm('Are you sure you want to delete this project?')) {
-      try {
-        await api.delete(`/projects/${id}`);
-        await fetchProjects();
-      } catch (error) {
-        console.error('Error deleting project:', error);
-        alert('Failed to delete project');
-      }
+  const handlePublishPortfolio = async (id: string) => {
+    try {
+      await api.put(`/projects/${id}`, { isPortfolio: true });
+      fetchData();
+    } catch (error) {
+      console.error('Error publishing to portfolio:', error);
     }
   };
 
-  const getStatusBadge = (status: string) => {
-    switch(status.toLowerCase()) {
-      case 'active':
-        return <span className="badge badge-success">Active</span>;
-      case 'planned':
-        return <span className="badge badge-warning">Planned</span>;
-      case 'completed':
-        return <span className="badge badge-neutral">Completed</span>;
-      default:
-        return <span className="badge badge-neutral">{status}</span>;
+  const createProject = async () => {
+    const name = prompt('Enter new project name:');
+    if (!name) return;
+    try {
+      await api.post('/projects', { name, status: 'PLANNED' });
+      fetchData();
+    } catch (error) {
+      console.error('Error creating project:', error);
     }
   };
+
+  const updateProjectMeta = async (updates: any) => {
+    if (!selectedProject) return;
+    try {
+      const res = await api.put(`/projects/${selectedProject.id}`, updates);
+      setSelectedProject({ ...selectedProject, ...res.data });
+      fetchData();
+    } catch (error) {
+      console.error('Error updating project:', error);
+    }
+  };
+
+  // Task Management
+  const addTask = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newTaskTitle || !selectedProject) return;
+    try {
+      await api.post(`/tasks`, { projectId: selectedProject.id, title: newTaskTitle });
+      setNewTaskTitle('');
+      // refresh project
+      const res = await api.get('/projects');
+      setProjects(res.data);
+      const updated = res.data.find((p: any) => p.id === selectedProject.id);
+      setSelectedProject(updated);
+    } catch (error) {
+      console.error('Error adding task:', error);
+    }
+  };
+
+  const toggleTask = async (taskId: string, currentStatus: string) => {
+    const newStatus = currentStatus === 'DONE' ? 'TODO' : 'DONE';
+    try {
+      await api.put(`/tasks/${taskId}`, { status: newStatus });
+      // refresh project
+      const res = await api.get('/projects');
+      setProjects(res.data);
+      const updated = res.data.find((p: any) => p.id === selectedProject.id);
+      setSelectedProject(updated);
+    } catch (error) {
+      console.error('Error updating task:', error);
+    }
+  };
+
+  const deleteTask = async (taskId: string) => {
+    try {
+      await api.delete(`/tasks/${taskId}`);
+      // refresh project
+      const res = await api.get('/projects');
+      setProjects(res.data);
+      const updated = res.data.find((p: any) => p.id === selectedProject.id);
+      setSelectedProject(updated);
+    } catch (error) {
+      console.error('Error deleting task:', error);
+    }
+  };
+
+  const getColumns = () => {
+    return [
+      { id: 'PLANNED', title: 'Planned' },
+      { id: 'ACTIVE', title: 'Active' },
+      { id: 'COMPLETED', title: 'Completed' }
+    ];
+  };
+
+  if (loading) return <div style={{ padding: 40, color: 'white' }}>Loading board...</div>;
 
   return (
-    <div style={{ paddingBottom: '2rem' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-        <h2 style={{ fontSize: '1.75rem', fontWeight: 600, fontFamily: 'Outfit, sans-serif' }}>Portfolio Projects</h2>
+    <div style={{ padding: '32px', height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
+        <h1 style={{ fontSize: '24px', fontWeight: 600, color: 'white', margin: 0 }}>Project Board</h1>
         <button 
-          className="btn btn-primary" 
-          onClick={() => {
-            setEditingId(null);
-            setImageFile(null);
-            setFormData({
-              name: '', description: '', status: 'ACTIVE', imageUrl: '', websiteUrl: '', tags: '', projectType: '', industry: '', platform: '', projectInfo: '', challenges: '', outcome: '', scopeOfWork: '', gallery: ''
-            });
-            setShowModal(true);
-          }}
-          style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+          onClick={createProject}
+          style={{ background: 'white', color: 'black', border: 'none', padding: '10px 20px', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontWeight: 500 }}
         >
-          <Plus size={18} /> Add Project
+          <Plus size={18} /> New Project
         </button>
       </div>
 
-      {loading ? (
-        <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-secondary)' }}>Loading portfolio projects...</div>
-      ) : projects.length === 0 ? (
-        <div className="glass-panel" style={{ textAlign: 'center', padding: '4rem 2rem', color: 'var(--text-secondary)' }}>
-          <div style={{ marginBottom: '1rem', opacity: 0.5 }}>
-            <ImageIcon size={48} style={{ margin: '0 auto' }} />
-          </div>
-          <h3 style={{ fontSize: '1.25rem', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>No projects found</h3>
-          <p>Get started by adding your first portfolio project.</p>
-        </div>
-      ) : (
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', 
-          gap: '1.5rem' 
-        }}>
-          {projects.map((project: any) => (
-            <div key={project.id} className="glass-panel" style={{ padding: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-              <div style={{ 
-                height: '180px', 
-                backgroundColor: 'rgba(0,0,0,0.2)', 
-                backgroundImage: project.imageUrl ? `url(${project.imageUrl})` : 'none',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderBottom: '1px solid rgba(255,255,255,0.05)'
-              }}>
-                {!project.imageUrl && <ImageIcon size={32} opacity={0.2} />}
-              </div>
-              <div style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
-                  <h3 style={{ fontSize: '1.25rem', fontWeight: 600, margin: 0, fontFamily: 'Outfit, sans-serif' }}>{project.name}</h3>
-                  {getStatusBadge(project.status)}
-                </div>
-                
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.5, marginBottom: '1.5rem', flex: 1 }}>
-                  {project.description || 'No description provided.'}
-                </p>
+      <div style={{ display: 'flex', gap: '24px', flex: 1, overflowX: 'auto', paddingBottom: '16px' }}>
+        {getColumns().map(col => (
+          <div key={col.id} style={{ minWidth: '320px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '16px', padding: '20px', display: 'flex', flexDirection: 'column' }}>
+            <h3 style={{ margin: '0 0 20px 0', color: '#a3a3a3', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              {col.title}
+              <span style={{ background: 'rgba(255,255,255,0.1)', padding: '2px 8px', borderRadius: '12px', fontSize: '12px' }}>
+                {projects.filter(p => p.status === col.id).length}
+              </span>
+            </h3>
 
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1.5rem' }}>
-                  {project.tags && project.tags.map((tag: string, i: number) => (
-                    <span key={i} style={{ 
-                      fontSize: '0.75rem', 
-                      padding: '0.2rem 0.6rem', 
-                      backgroundColor: 'rgba(255,255,255,0.05)', 
-                      borderRadius: '4px',
-                      color: 'var(--text-secondary)'
-                    }}>
-                      {tag}
-                    </span>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', flex: 1, overflowY: 'auto' }}>
+              {projects.filter(p => p.status === col.id).map(project => (
+                <div 
+                  key={project.id} 
+                  onClick={() => { setSelectedProject(project); setIsModalOpen(true); }}
+                  style={{ background: 'var(--bg-primary)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '16px', cursor: 'pointer', position: 'relative' }}
+                >
+                  <h4 style={{ margin: '0 0 12px 0', color: 'white', fontSize: '16px' }}>{project.name}</h4>
+                  
+                  {project.client && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#a3a3a3', fontSize: '13px', marginBottom: '12px' }}>
+                      <Users size={14} />
+                      {project.client.name}
+                    </div>
+                  )}
+
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: '#888', fontSize: '12px', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '12px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <CheckSquare size={14} />
+                      {project.tasks?.filter((t:any) => t.status === 'DONE').length || 0} / {project.tasks?.length || 0}
+                    </div>
+                    {project.isPortfolio && (
+                      <span style={{ color: '#a3e635', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <Globe size={12} /> Published
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Project Modal */}
+      {isModalOpen && selectedProject && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 40 }}>
+          <div style={{ background: 'var(--bg-secondary)', width: '100%', maxWidth: '800px', maxHeight: '90vh', borderRadius: '24px', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+            
+            <div style={{ padding: '24px 32px', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <h2 style={{ margin: 0, color: 'white', fontSize: '24px' }}>{selectedProject.name}</h2>
+              <div style={{ display: 'flex', gap: '12px' }}>
+                <select 
+                  value={selectedProject.status} 
+                  onChange={(e) => {
+                    handleUpdateStatus(selectedProject.id, e.target.value);
+                    setSelectedProject({...selectedProject, status: e.target.value});
+                  }}
+                  style={{ background: 'rgba(255,255,255,0.1)', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '8px', outline: 'none' }}
+                >
+                  <option value="PLANNED">Planned</option>
+                  <option value="ACTIVE">Active</option>
+                  <option value="COMPLETED">Completed</option>
+                </select>
+                <button onClick={() => setIsModalOpen(false)} style={{ background: 'transparent', border: 'none', color: '#a3a3a3', cursor: 'pointer' }}>Close</button>
+              </div>
+            </div>
+
+            <div style={{ padding: '32px', overflowY: 'auto', flex: 1, display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '32px' }}>
+              
+              {/* Left Column: Tasks */}
+              <div>
+                <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'white', fontSize: '18px', marginTop: 0, marginBottom: '24px' }}>
+                  <CheckSquare size={20} color="#a3e635" /> Tasks
+                </h3>
+                
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px' }}>
+                  {selectedProject.tasks?.map((task: any) => (
+                    <div key={task.id} style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'rgba(0,0,0,0.2)', padding: '12px 16px', borderRadius: '8px' }}>
+                      <div 
+                        onClick={() => toggleTask(task.id, task.status)}
+                        style={{ cursor: 'pointer', color: task.status === 'DONE' ? '#a3e635' : '#555' }}
+                      >
+                        {task.status === 'DONE' ? <CheckCircle size={20} /> : <div style={{ width: 18, height: 18, border: '2px solid #555', borderRadius: '4px' }} />}
+                      </div>
+                      <span style={{ flex: 1, color: task.status === 'DONE' ? '#888' : 'white', textDecoration: task.status === 'DONE' ? 'line-through' : 'none', fontSize: '15px' }}>
+                        {task.title}
+                      </span>
+                      <button onClick={() => deleteTask(task.id)} style={{ background: 'transparent', border: 'none', color: '#666', cursor: 'pointer' }}>
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
                   ))}
                 </div>
 
-                {project.websiteUrl && (
-                  <a 
-                    href={project.websiteUrl} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    style={{ 
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      gap: '0.5rem',
-                      color: 'var(--accent-primary)',
-                      textDecoration: 'none',
-                      fontSize: '0.9rem',
-                      fontWeight: 500,
-                      marginBottom: '1rem'
-                    }}
-                  >
-                    View Live Site <ExternalLink size={14} />
-                  </a>
+                <form onSubmit={addTask} style={{ display: 'flex', gap: '12px' }}>
+                  <input 
+                    type="text" 
+                    value={newTaskTitle}
+                    onChange={(e) => setNewTaskTitle(e.target.value)}
+                    placeholder="Add a new task..." 
+                    style={{ flex: 1, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '12px 16px', borderRadius: '8px', color: 'white' }}
+                  />
+                  <button type="submit" style={{ background: 'white', color: 'black', border: 'none', padding: '0 20px', borderRadius: '8px', fontWeight: 500, cursor: 'pointer' }}>Add</button>
+                </form>
+              </div>
+
+              {/* Right Column: Meta */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                
+                {/* Publish to Portfolio */}
+                {selectedProject.status === 'COMPLETED' && !selectedProject.isPortfolio && (
+                  <div style={{ background: 'rgba(163, 230, 53, 0.1)', border: '1px solid rgba(163, 230, 53, 0.2)', padding: '20px', borderRadius: '12px', textAlign: 'center' }}>
+                    <Globe size={32} color="#a3e635" style={{ marginBottom: 12 }} />
+                    <h4 style={{ margin: '0 0 8px 0', color: 'white' }}>Publish Case Study</h4>
+                    <p style={{ margin: '0 0 16px 0', fontSize: '13px', color: '#a3a3a3' }}>Make this project visible on the public portfolio.</p>
+                    <button 
+                      onClick={() => handlePublishPortfolio(selectedProject.id)}
+                      style={{ background: '#a3e635', color: 'black', border: 'none', padding: '10px 16px', borderRadius: '8px', width: '100%', fontWeight: 600, cursor: 'pointer' }}
+                    >
+                      Publish Now
+                    </button>
+                  </div>
+                )}
+                {selectedProject.isPortfolio && (
+                  <div style={{ background: 'rgba(255,255,255,0.05)', padding: '16px', borderRadius: '12px', textAlign: 'center', color: '#a3e635', fontSize: '14px', fontWeight: 500 }}>
+                    <Globe size={16} style={{ verticalAlign: 'text-bottom', marginRight: 8 }} />
+                    Published to Portfolio
+                  </div>
                 )}
 
-                <div style={{ display: 'flex', gap: '0.75rem', marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-                  <button 
-                    onClick={() => handleEdit(project)}
-                    style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', padding: '0.6rem', background: 'rgba(255,255,255,0.05)', border: 'none', borderRadius: '4px', color: 'white', cursor: 'pointer', transition: 'background 0.2s' }}
-                    onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
-                    onMouseOut={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
-                  >
-                    <Pencil size={14} /> Edit
-                  </button>
-                  <button 
-                    onClick={() => handleDelete(project.id)}
-                    style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', padding: '0.6rem', background: 'rgba(239, 68, 68, 0.1)', border: 'none', borderRadius: '4px', color: '#ef4444', cursor: 'pointer', transition: 'background 0.2s' }}
-                    onMouseOver={(e) => e.currentTarget.style.background = 'rgba(239, 68, 68, 0.2)'}
-                    onMouseOut={(e) => e.currentTarget.style.background = 'rgba(239, 68, 68, 0.1)'}
-                  >
-                    <Trash2 size={14} /> Delete
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Add Project Modal */}
-      {showModal && (
-        <div style={{
-          position: 'fixed',
-          top: 0, left: 0, right: 0, bottom: 0,
-          backgroundColor: 'rgba(0,0,0,0.7)',
-          backdropFilter: 'blur(4px)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 1000,
-          padding: '1rem'
-        }}>
-          <div className="glass-panel animate-fade-in" style={{ 
-            width: '100%', 
-            maxWidth: '500px', 
-            maxHeight: '90vh', 
-            overflowY: 'auto',
-            padding: '2rem' 
-          }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-              <h3 style={{ fontSize: '1.5rem', margin: 0, fontFamily: 'Outfit, sans-serif' }}>{editingId ? 'Edit Project' : 'New Portfolio Project'}</h3>
-              <button 
-                onClick={() => {
-                  setShowModal(false);
-                  setEditingId(null);
-                  setImageFile(null);
-                }}
-                style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}
-              >
-                <X size={24} />
-              </button>
-            </div>
-
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-              <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Project Name *</label>
-                <input 
-                  type="text" 
-                  name="name" 
-                  required
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
-                />
-              </div>
-
-              <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Description (Short)</label>
-                <textarea 
-                  name="description" 
-                  rows={2}
-                  value={formData.description}
-                  onChange={handleInputChange}
-                  style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', resize: 'vertical' }}
-                />
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem' }}>
                 <div>
-                  <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Project Type</label>
-                  <input 
-                    type="text" 
-                    name="projectType" 
-                    placeholder="e.g. B2B Platform"
-                    value={formData.projectType}
-                    onChange={handleInputChange}
-                    style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
-                  />
-                </div>
-                <div>
-                  <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Industry</label>
-                  <input 
-                    type="text" 
-                    name="industry" 
-                    placeholder="e.g. Fintech"
-                    value={formData.industry}
-                    onChange={handleInputChange}
-                    style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
-                  />
-                </div>
-                <div>
-                  <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Platform</label>
-                  <input 
-                    type="text" 
-                    name="platform" 
-                    placeholder="e.g. Web & API"
-                    value={formData.platform}
-                    onChange={handleInputChange}
-                    style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Project Info (Detailed)</label>
-                <textarea 
-                  name="projectInfo" 
-                  rows={4}
-                  value={formData.projectInfo}
-                  onChange={handleInputChange}
-                  style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', resize: 'vertical' }}
-                />
-              </div>
-
-              <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Challenges</label>
-                <textarea 
-                  name="challenges" 
-                  rows={3}
-                  value={formData.challenges}
-                  onChange={handleInputChange}
-                  style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', resize: 'vertical' }}
-                />
-              </div>
-
-              <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Outcome / Results</label>
-                <textarea 
-                  name="outcome" 
-                  rows={3}
-                  value={formData.outcome}
-                  onChange={handleInputChange}
-                  style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', resize: 'vertical' }}
-                />
-              </div>
-
-              <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Scope of Work</label>
-                <textarea 
-                  name="scopeOfWork" 
-                  rows={3}
-                  value={formData.scopeOfWork}
-                  onChange={handleInputChange}
-                  style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', resize: 'vertical' }}
-                />
-              </div>
-
-              <div style={{ display: 'flex', gap: '1rem' }}>
-                <div style={{ flex: 1 }}>
-                  <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Status</label>
+                  <label style={{ display: 'block', fontSize: '12px', color: '#888', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>Client</label>
                   <select 
-                    name="status"
-                    value={formData.status}
-                    onChange={handleInputChange}
-                    style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
+                    value={selectedProject.clientId || ''}
+                    onChange={(e) => updateProjectMeta({ clientId: e.target.value })}
+                    style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '12px', borderRadius: '8px', color: 'white', outline: 'none' }}
                   >
-                    <option value="ACTIVE">Active</option>
-                    <option value="PLANNED">Planned</option>
-                    <option value="COMPLETED">Completed</option>
+                    <option value="">No Client Assigned</option>
+                    {clients.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                   </select>
                 </div>
-              </div>
 
-              <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Project Image</label>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                  <input 
-                    type="file" 
-                    accept="image/*"
-                    onChange={(e) => {
-                      if (e.target.files && e.target.files.length > 0) {
-                        setImageFile(e.target.files[0]);
-                      }
-                    }}
-                    style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
-                  />
-                  <div style={{ textAlign: 'center', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>OR</div>
-                  <input 
-                    type="url" 
-                    name="imageUrl"
-                    placeholder="Image URL (e.g., https://example.com/image.png)"
-                    value={formData.imageUrl}
-                    onChange={handleInputChange}
-                    style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
-                  />
+                <div>
+                  <label style={{ display: 'block', fontSize: '12px', color: '#888', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>Timeline</label>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <input 
+                      type="date" 
+                      value={selectedProject.startDate ? selectedProject.startDate.split('T')[0] : ''}
+                      onChange={(e) => updateProjectMeta({ startDate: e.target.value })}
+                      style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '12px', borderRadius: '8px', color: 'white', colorScheme: 'dark' }}
+                    />
+                    <input 
+                      type="date" 
+                      value={selectedProject.endDate ? selectedProject.endDate.split('T')[0] : ''}
+                      onChange={(e) => updateProjectMeta({ endDate: e.target.value })}
+                      style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '12px', borderRadius: '8px', color: 'white', colorScheme: 'dark' }}
+                    />
+                  </div>
                 </div>
-              </div>
 
-              <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Website URL</label>
-                <input 
-                  type="url" 
-                  name="websiteUrl"
-                  placeholder="https://myproject.com"
-                  value={formData.websiteUrl}
-                  onChange={handleInputChange}
-                  style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
-                />
               </div>
+            </div>
 
-              <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Tags (comma separated)</label>
-                <input 
-                  type="text" 
-                  name="tags"
-                  placeholder="React, UI/UX, Node.js"
-                  value={formData.tags}
-                  onChange={handleInputChange}
-                  style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
-                />
-              </div>
-
-              <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Gallery Image URLs (comma separated)</label>
-                <input 
-                  type="text" 
-                  name="gallery"
-                  placeholder="https://image1.png, https://image2.png"
-                  value={formData.gallery}
-                  onChange={handleInputChange}
-                  style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
-                />
-              </div>
-
-              <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
-                <button 
-                  type="button" 
-                  onClick={() => {
-                    setShowModal(false);
-                    setEditingId(null);
-                    setImageFile(null);
-                  }}
-                  style={{ padding: '0.75rem 1.5rem', background: 'none', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '6px', cursor: 'pointer' }}
-                >
-                  Cancel
-                </button>
-                <button 
-                  type="submit" 
-                  className="btn btn-primary"
-                  disabled={submitting}
-                  style={{ opacity: submitting ? 0.7 : 1 }}
-                >
-                  {submitting ? (editingId ? 'Saving...' : 'Creating...') : (editingId ? 'Save Changes' : 'Create Project')}
-                </button>
-              </div>
-            </form>
           </div>
         </div>
       )}
+
     </div>
   );
-};
-
-export default Projects;
+}

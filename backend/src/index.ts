@@ -8,6 +8,7 @@ import uploadRoutes from './routes/uploadRoutes';
 import blogRoutes from './routes/blogRoutes';
 import invoiceRoutes from './routes/invoiceRoutes';
 import scheduleRoutes from './routes/scheduleRoutes';
+import taskRoutes from './routes/taskRoutes';
 import path from 'path';
 import { authenticateToken } from './middleware/authMiddleware';
 
@@ -27,6 +28,7 @@ app.use('/api/upload', uploadRoutes);
 app.use('/api/blogs', blogRoutes);
 app.use('/api/invoices', authenticateToken, invoiceRoutes);
 app.use('/api/schedules', authenticateToken, scheduleRoutes);
+app.use('/api/tasks', authenticateToken, taskRoutes);
 
 // Static files
 app.use('/project', express.static(path.join(process.cwd(), 'project')));

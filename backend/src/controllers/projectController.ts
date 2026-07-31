@@ -9,9 +9,20 @@ export const getProjects = async (req: Request, res: Response) => {
       return res.json(cachedProjects);
     }
 
+    const { portfolio, admin } = req.query;
+    
+    // In admin mode, we fetch all projects, otherwise we might filter
+    // If portfolio=true is passed, only fetch isPortfolio: true
+    const whereClause: any = {};
+    if (portfolio === 'true') {
+      whereClause.isPortfolio = true;
+    }
+
     const projects = await prisma.project.findMany({
+      where: whereClause,
       include: {
         client: true,
+        tasks: true
       },
       orderBy: {
         createdAt: 'desc',
@@ -38,6 +49,7 @@ export const getProject = async (req: Request<{ id: string }>, res: Response) =>
       where: { id },
       include: {
         client: true,
+        tasks: true
       },
     });
     if (!project) {
@@ -53,7 +65,7 @@ export const getProject = async (req: Request<{ id: string }>, res: Response) =>
 
 export const createProject = async (req: Request, res: Response) => {
   try {
-    const { name, description, status, clientId, imageUrl, websiteUrl, tags, companyName, country, category, projectInfo, challenges, outcome, scopeOfWork, gallery, projectType, industry, platform } = req.body;
+    const { name, description, status, clientId, imageUrl, websiteUrl, tags, companyName, country, category, projectInfo, challenges, outcome, scopeOfWork, gallery, projectType, industry, platform, isPortfolio, startDate, endDate, progress } = req.body;
     const project = await prisma.project.create({
       data: {
         name,
@@ -74,6 +86,10 @@ export const createProject = async (req: Request, res: Response) => {
         projectType,
         industry,
         platform,
+        isPortfolio: isPortfolio || false,
+        startDate: startDate ? new Date(startDate) : null,
+        endDate: endDate ? new Date(endDate) : null,
+        progress: progress || 0
       },
     });
 
@@ -87,7 +103,7 @@ export const createProject = async (req: Request, res: Response) => {
 export const updateProject = async (req: Request<{ id: string }>, res: Response) => {
   try {
     const { id } = req.params;
-    const { name, description, status, clientId, imageUrl, websiteUrl, tags, companyName, country, category, projectInfo, challenges, outcome, scopeOfWork, gallery, projectType, industry, platform } = req.body;
+    const { name, description, status, clientId, imageUrl, websiteUrl, tags, companyName, country, category, projectInfo, challenges, outcome, scopeOfWork, gallery, projectType, industry, platform, isPortfolio, startDate, endDate, progress } = req.body;
     const project = await prisma.project.update({
       where: { id },
       data: {
@@ -109,6 +125,10 @@ export const updateProject = async (req: Request<{ id: string }>, res: Response)
         projectType,
         industry,
         platform,
+        isPortfolio: isPortfolio !== undefined ? isPortfolio : undefined,
+        startDate: startDate ? new Date(startDate) : undefined,
+        endDate: endDate ? new Date(endDate) : undefined,
+        progress: progress !== undefined ? progress : undefined
       },
     });
 
