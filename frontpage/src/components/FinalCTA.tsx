@@ -1,11 +1,11 @@
 export default function FinalCTA() {
   return (
-    <section style={{ maxWidth: 1280, margin: '0 auto', padding: '120px 40px' }}>
-      <div style={{ position: 'relative', background: '#101010', border: '1px solid #232323', borderRadius: 32, padding: '80px', overflow: 'hidden' }}>
+    <section className="mobile-padded" style={{ maxWidth: 1280, margin: '0 auto', padding: '120px 40px' }}>
+      <div className="final-cta-box" style={{ position: 'relative', background: '#101010', border: '1px solid #232323', borderRadius: 32, padding: '80px', overflow: 'hidden' }}>
         <div className="glow-orb" style={{ position: 'absolute', width: 600, height: 400, background: 'rgba(171, 9, 36,0.08)', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }} />
         <div className="grid-bg" style={{ position: 'absolute', inset: 0, opacity: 0.5 }} />
 
-        <div style={{ position: 'relative', zIndex: 1, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'start' }}>
+        <div className="responsive-grid-2" style={{ position: 'relative', zIndex: 1, alignItems: 'start' }}>
           {/* Left */}
           <div>
             <div className="badge" style={{ marginBottom: 24 }}>Let's build together</div>

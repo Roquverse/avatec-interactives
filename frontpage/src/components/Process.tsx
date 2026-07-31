@@ -69,6 +69,7 @@ export default function Process() {
             </div>
 
             <div
+              className="process-desc-mobile"
               style={{
                 fontSize: 13, color: '#a3a3a3', lineHeight: 1.6, fontFamily: 'Inter',
                 maxHeight: active === i ? 120 : 0,

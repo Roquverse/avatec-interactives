@@ -21,9 +21,12 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
+  overflow-x: hidden;
+  width: 100%;
   background-color: #050505;
   color: #ffffff;
   font-family: 'Inter', sans-serif;
@@ -369,9 +372,12 @@ img {
     width: 100%;
   }
 
-  /* Featured Work */
+  /* Featured Work & Final CTA */
   .featured-work-right-column {
     margin-top: 0 !important;
+  }
+  .final-cta-box {
+    padding: 32px !important;
   }
 
   /* Project Detail */
@@ -405,6 +411,11 @@ img {
   }
   .show-mobile {
     display: block !important;
+  }
+  .process-desc-mobile {
+    max-height: 200px !important;
+    opacity: 1 !important;
+    margin-top: 12px;
   }
 }
 
