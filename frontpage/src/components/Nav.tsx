@@ -113,7 +113,7 @@ export default function Nav() {
 
       {/* Mobile Menu Dropdown */}
       {isMobileMenuOpen && (
-        <div className="show-mobile" style={{
+        <div className="show-mobile-flex" style={{
           position: 'absolute',
           top: 80,
           left: 0,
@@ -122,7 +122,6 @@ export default function Nav() {
           borderRadius: 16,
           padding: 20,
           boxShadow: '0 10px 32px rgba(0,0,0,0.1)',
-          display: 'flex',
           flexDirection: 'column',
           gap: 20,
           border: '1px solid rgba(0,0,0,0.05)'

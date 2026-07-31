@@ -412,6 +412,9 @@ img {
   .show-mobile {
     display: block !important;
   }
+  .show-mobile-flex {
+    display: flex !important;
+  }
   .process-desc-mobile {
     max-height: 200px !important;
     opacity: 1 !important;
@@ -421,6 +424,9 @@ img {
 
 @media (min-width: 769px) {
   .show-mobile {
+    display: none !important;
+  }
+  .show-mobile-flex {
     display: none !important;
   }
 }

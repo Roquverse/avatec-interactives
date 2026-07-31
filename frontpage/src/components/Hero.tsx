@@ -158,7 +158,7 @@ export default function Hero() {
         </div>
 
         {/* ── RIGHT: hero image ── */}
-        <div className="hero-image-wrapper">
+        <div className="hero-image-wrapper hide-mobile">
           <img
             src="/hero.png"
             alt="Avatec platform illustration"
