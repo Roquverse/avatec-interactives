@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { User, Bell, Lock, Shield, Moon, Monitor } from 'lucide-react';
+import { useState } from 'react';
+import { User, Bell, Lock, Moon, Monitor } from 'lucide-react';
 
 export default function Settings() {
   const [activeTab, setActiveTab] = useState('profile');
