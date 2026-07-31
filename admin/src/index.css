@@ -433,3 +433,57 @@ h1, h2, h3, h4, h5, h6 {
   height: 10px;
   border-radius: 50%;
 }
+
+/* Invoice Table */
+.invoice-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.invoice-table th {
+  text-align: left;
+  padding: 1rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--bg-tertiary);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.invoice-table td {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.invoice-table tr:hover {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* Status Badges */
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-badge.paid {
+  background-color: rgba(163, 230, 53, 0.2);
+  color: var(--accent-primary);
+}
+
+.status-badge.pending {
+  background-color: rgba(251, 146, 60, 0.2);
+  color: var(--accent-secondary);
+}
+
+.status-badge.draft {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+}
+
