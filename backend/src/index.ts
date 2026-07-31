@@ -5,6 +5,9 @@ import clientRoutes from './routes/clientRoutes';
 import projectRoutes from './routes/projectRoutes';
 import authRoutes from './routes/authRoutes';
 import uploadRoutes from './routes/uploadRoutes';
+import blogRoutes from './routes/blogRoutes';
+import invoiceRoutes from './routes/invoiceRoutes';
+import scheduleRoutes from './routes/scheduleRoutes';
 import path from 'path';
 import { authenticateToken } from './middleware/authMiddleware';
 
@@ -21,6 +24,9 @@ app.use('/api/auth', authRoutes);
 app.use('/api/clients', authenticateToken, clientRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/blogs', blogRoutes);
+app.use('/api/invoices', authenticateToken, invoiceRoutes);
+app.use('/api/schedules', authenticateToken, scheduleRoutes);
 
 // Static files
 app.use('/project', express.static(path.join(process.cwd(), 'project')));

@@ -5,6 +5,10 @@ import DashboardLayout from './layouts/DashboardLayout';
 import Overview from './pages/Overview';
 import Clients from './pages/Clients';
 import Projects from './pages/Projects';
+import Insights from './pages/Insights';
+import Portfolio from './pages/Portfolio';
+import Invoices from './pages/Invoices';
+import Schedule from './pages/Schedule';
 
 // Protected Route wrapper
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -27,6 +31,10 @@ function App() {
           <Route index element={<Overview />} />
           <Route path="clients" element={<Clients />} />
           <Route path="projects" element={<Projects />} />
+          <Route path="insights" element={<Insights />} />
+          <Route path="portfolio" element={<Portfolio />} />
+          <Route path="invoices" element={<Invoices />} />
+          <Route path="schedule" element={<Schedule />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />

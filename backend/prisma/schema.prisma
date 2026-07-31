@@ -18,6 +18,7 @@ model Client {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   projects  Project[]
+  invoices  Invoice[]
 }
 
 model Project {
@@ -33,6 +34,10 @@ model Project {
   companyName String?
   country     String?
   category    String?
+  startDate   DateTime?
+  endDate     DateTime?
+  progress    Int      @default(0)
+  isPortfolio Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -41,6 +46,39 @@ model AdminUser {
   id        String   @id @default(uuid())
   email     String   @unique
   password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model BlogPost {
+  id        String   @id @default(uuid())
+  title     String
+  content   String?
+  author    String?
+  tags      String[]
+  published Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Invoice {
+  id        String   @id @default(uuid())
+  clientId  String
+  client    Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  amount    Float
+  status    String   @default("DRAFT")
+  dueDate   DateTime?
+  lineItems Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ScheduleEvent {
+  id        String   @id @default(uuid())
+  title     String
+  date      DateTime
+  endDate   DateTime?
+  attendees String[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
