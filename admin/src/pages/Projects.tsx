@@ -20,7 +20,9 @@ const Projects = () => {
     tags: '',
     projectInfo: '',
     challenges: '',
-    outcome: ''
+    outcome: '',
+    scopeOfWork: '',
+    gallery: ''
   });
 
   const fetchProjects = async () => {
@@ -50,6 +52,9 @@ const Projects = () => {
       const tagsArray = formData.tags
         ? formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0)
         : [];
+      const galleryArray = formData.gallery
+        ? formData.gallery.split(',').map(url => url.trim()).filter(url => url.length > 0)
+        : [];
 
       let finalImageUrl = formData.imageUrl;
       if (imageFile) {
@@ -66,12 +71,14 @@ const Projects = () => {
           ...formData,
           imageUrl: finalImageUrl,
           tags: tagsArray,
+          gallery: galleryArray,
         });
       } else {
         await api.post('/projects', {
           ...formData,
           imageUrl: finalImageUrl,
           tags: tagsArray,
+          gallery: galleryArray,
           clientId: null
         });
       }
@@ -80,7 +87,7 @@ const Projects = () => {
       setEditingId(null);
       setImageFile(null);
       setFormData({
-        name: '', description: '', status: 'ACTIVE', imageUrl: '', websiteUrl: '', tags: '', projectInfo: '', challenges: '', outcome: ''
+        name: '', description: '', status: 'ACTIVE', imageUrl: '', websiteUrl: '', tags: '', projectInfo: '', challenges: '', outcome: '', scopeOfWork: '', gallery: ''
       });
       await fetchProjects();
     } catch (error) {
@@ -101,7 +108,9 @@ const Projects = () => {
       tags: project.tags ? project.tags.join(', ') : '',
       projectInfo: project.projectInfo || '',
       challenges: project.challenges || '',
-      outcome: project.outcome || ''
+      outcome: project.outcome || '',
+      scopeOfWork: project.scopeOfWork || '',
+      gallery: project.gallery ? project.gallery.join(', ') : ''
     });
     setEditingId(project.id);
     setImageFile(null);
@@ -143,7 +152,7 @@ const Projects = () => {
             setEditingId(null);
             setImageFile(null);
             setFormData({
-              name: '', description: '', status: 'ACTIVE', imageUrl: '', websiteUrl: '', tags: '', projectInfo: '', challenges: '', outcome: ''
+              name: '', description: '', status: 'ACTIVE', imageUrl: '', websiteUrl: '', tags: '', projectInfo: '', challenges: '', outcome: '', scopeOfWork: '', gallery: ''
             });
             setShowModal(true);
           }}
@@ -343,6 +352,17 @@ const Projects = () => {
                 />
               </div>
 
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Scope of Work</label>
+                <textarea 
+                  name="scopeOfWork" 
+                  rows={3}
+                  value={formData.scopeOfWork}
+                  onChange={handleInputChange}
+                  style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', resize: 'vertical' }}
+                />
+              </div>
+
               <div style={{ display: 'flex', gap: '1rem' }}>
                 <div style={{ flex: 1 }}>
                   <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Status</label>
@@ -403,6 +423,18 @@ const Projects = () => {
                   name="tags"
                   placeholder="React, UI/UX, Node.js"
                   value={formData.tags}
+                  onChange={handleInputChange}
+                  style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
+                />
+              </div>
+
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Gallery Image URLs (comma separated)</label>
+                <input 
+                  type="text" 
+                  name="gallery"
+                  placeholder="https://image1.png, https://image2.png"
+                  value={formData.gallery}
                   onChange={handleInputChange}
                   style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
                 />
