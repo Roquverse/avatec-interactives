@@ -58,8 +58,10 @@ export default function Nav() {
           ))}
         </div>
 
-        <Link
-          to="/contact"
+        <a
+          href="https://calendly.com/helpdesk-avatecinteractives/30min"
+          target="_blank"
+          rel="noopener noreferrer"
           style={{
             fontFamily: 'Outfit',
             fontWeight: 600,
@@ -88,7 +90,7 @@ export default function Nav() {
           }}
         >
           Book a call
-        </Link>
+        </a>
       </div>
     </nav>
   )

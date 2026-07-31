@@ -1,8 +1,4 @@
-import { useState } from 'react'
-
 export default function FinalCTA() {
-  const [formData, setFormData] = useState({ name: '', email: '', idea: '' })
-
   return (
     <section style={{ maxWidth: 1280, margin: '0 auto', padding: '120px 40px' }}>
       <div style={{ position: 'relative', background: '#101010', border: '1px solid #232323', borderRadius: 32, padding: '80px', overflow: 'hidden' }}>
@@ -31,43 +27,21 @@ export default function FinalCTA() {
             </div>
           </div>
 
-          {/* Right — form */}
+          {/* Right — Calendly CTA */}
           <div style={{ background: '#161616', border: '1px solid #232323', borderRadius: 20, padding: 36 }}>
-            <h3 style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: 20, color: 'white', marginBottom: 28 }}>Get in touch</h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-              {[
-                { label: 'Your name',      key: 'name',  placeholder: 'Jane Doe',          type: 'text'  },
-                { label: 'Email address',  key: 'email', placeholder: 'jane@company.com',   type: 'email' },
-              ].map(({ label, key, placeholder, type }) => (
-                <div key={key}>
-                  <label style={{ fontFamily: 'Outfit', fontSize: 13, fontWeight: 600, color: '#a3a3a3', display: 'block', marginBottom: 8 }}>{label}</label>
-                  <input
-                    type={type}
-                    placeholder={placeholder}
-                    value={formData[key as keyof typeof formData]}
-                    onChange={e => setFormData(prev => ({ ...prev, [key]: e.target.value }))}
-                    style={{ width: '100%', padding: '12px 16px', borderRadius: 10, border: '1px solid #232323', background: '#101010', color: 'white', fontFamily: 'Inter', fontSize: 14, outline: 'none', transition: 'border-color 0.2s' }}
-                    onFocus={e => (e.target.style.borderColor = 'rgba(171, 9, 36,0.5)')}
-                    onBlur={e => (e.target.style.borderColor = '#232323')}
-                  />
-                </div>
-              ))}
-              <div>
-                <label style={{ fontFamily: 'Outfit', fontSize: 13, fontWeight: 600, color: '#a3a3a3', display: 'block', marginBottom: 8 }}>Tell us about your idea</label>
-                <textarea
-                  placeholder="We're building a marketplace for..."
-                  value={formData.idea}
-                  onChange={e => setFormData(prev => ({ ...prev, idea: e.target.value }))}
-                  rows={4}
-                  style={{ width: '100%', padding: '12px 16px', borderRadius: 10, border: '1px solid #232323', background: '#101010', color: 'white', fontFamily: 'Inter', fontSize: 14, outline: 'none', resize: 'none', transition: 'border-color 0.2s' }}
-                  onFocus={e => (e.target.style.borderColor = 'rgba(171, 9, 36,0.5)')}
-                  onBlur={e => (e.target.style.borderColor = '#232323')}
-                />
-              </div>
-              <button className="btn-primary" style={{ width: '100%', justifyContent: 'center', padding: '16px', fontSize: 15, marginTop: 4 }}>
-                Book a strategy call →
-              </button>
-            </div>
+            <h3 style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: 20, color: 'white', marginBottom: 16 }}>Book your session</h3>
+            <p style={{ fontSize: 14, color: '#a3a3a3', fontFamily: 'Inter', marginBottom: 28, lineHeight: 1.6 }}>
+              Choose a time that works for you. We'll discuss your idea, technical requirements, and how we can help you build it.
+            </p>
+            <a 
+              href="https://calendly.com/helpdesk-avatecinteractives/30min" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="btn-primary" 
+              style={{ width: '100%', justifyContent: 'center', padding: '16px', fontSize: 15, textDecoration: 'none', display: 'flex' }}
+            >
+              Schedule on Calendly →
+            </a>
           </div>
         </div>
       </div>
