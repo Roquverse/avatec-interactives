@@ -49,21 +49,17 @@ export default function Hero() {
       }} />
 
       {/* ── Main content grid ── */}
-      <div style={{
+      <div className="hero-grid" style={{
         maxWidth: 1280,
         margin: '0 auto',
         padding: '60px 48px 40px',
-        display: 'grid',
-        gridTemplateColumns: '1fr 1.6fr',
-        gap: 0,
-        alignItems: 'center',
         width: '100%',
         position: 'relative',
         zIndex: 1,
       }}>
 
         {/* ── LEFT: headline + CTA ── */}
-        <div style={{ animation: 'fade-up 0.9s ease-out forwards' }}>
+        <div className="hero-content" style={{ animation: 'fade-up 0.9s ease-out forwards' }}>
           <h1 style={{
             fontFamily: 'Outfit',
             fontWeight: 900,
@@ -162,24 +158,11 @@ export default function Hero() {
         </div>
 
         {/* ── RIGHT: hero image ── */}
-        <div style={{
-          position: 'relative',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'flex-end',
-          marginRight: -48,
-          overflow: 'visible',
-        }}>
+        <div className="hero-image-wrapper">
           <img
             src="/hero.png"
             alt="Avatec platform illustration"
-            style={{
-              width: '160%',
-              height: 'auto',
-              display: 'block',
-              objectFit: 'contain',
-              filter: 'drop-shadow(0 40px 100px rgba(107,15,26,0.35))',
-            }}
+            className="hero-image"
           />
         </div>
 

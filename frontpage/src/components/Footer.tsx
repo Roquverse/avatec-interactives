@@ -7,9 +7,9 @@ import { Link } from 'react-router-dom'
 
 export default function Footer() {
   return (
-    <footer style={{ borderTop: '1px solid #232323', background: '#050505' }}>
+    <footer className="mobile-padded" style={{ borderTop: '1px solid #232323', background: '#050505' }}>
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '64px 40px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: 48, marginBottom: 56 }}>
+        <div className="editorial-grid" style={{ marginBottom: 56 }}>
           {/* Brand */}
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
@@ -115,6 +115,7 @@ export default function Footer() {
         </div>
 
         <div
+          className="stack-mobile"
           style={{
             borderTop: '1px solid #232323', paddingTop: 32,
             display: 'flex', justifyContent: 'space-between', alignItems: 'center',

@@ -35,9 +35,9 @@ const articles = [
 
 export default function Insights() {
   return (
-    <section style={{ background: 'linear-gradient(160deg, #08071a 0%, #0d0b22 40%, #0b0918 75%, #06050f 100%)', borderTop: '1px solid #232323' }}>
+    <section className="mobile-padded" style={{ background: 'linear-gradient(160deg, #08071a 0%, #0d0b22 40%, #0b0918 75%, #06050f 100%)', borderTop: '1px solid #232323' }}>
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '120px 40px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 56, flexWrap: 'wrap', gap: 24 }}>
+        <div className="stack-mobile" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 56, flexWrap: 'wrap', gap: 24 }}>
           <div>
             <div className="section-label" style={{ marginBottom: 16 }}>Insights</div>
             <h2 className="display-heading" style={{ fontSize: 'clamp(40px, 5vw, 64px)', color: 'white' }}>From the studio.</h2>
@@ -45,12 +45,11 @@ export default function Insights() {
           <button className="btn-ghost">View all articles →</button>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gridTemplateRows: 'auto auto', gap: 16 }}>
+        <div className="responsive-grid-2">
           {articles.map((article, i) => (
             <div
               key={i}
               className="insight-card"
-              style={{ gridColumn: i === 0 ? '1' : undefined, gridRow: i === 0 ? '1 / span 2' : undefined }}
             >
               <div style={{ height: i === 0 ? 280 : 180, overflow: 'hidden', position: 'relative' }}>
                 <img

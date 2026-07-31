@@ -8,9 +8,9 @@ const points = [
 
 export default function WhyAvatec() {
   return (
-    <section style={{ background: '#080808', borderTop: '1px solid #232323' }}>
+    <section className="mobile-padded" style={{ background: '#080808', borderTop: '1px solid #232323' }}>
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '120px 40px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'start' }}>
+        <div className="responsive-grid-2" style={{ alignItems: 'start' }}>
           {/* Left */}
           <div>
             <div className="section-label" style={{ marginBottom: 16 }}>Why Avatec</div>

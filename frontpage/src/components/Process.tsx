@@ -12,7 +12,7 @@ export default function Process() {
   const [active, setActive] = useState<number | null>(null)
 
   return (
-    <section style={{ maxWidth: 1280, margin: '0 auto', padding: '120px 40px' }}>
+    <section className="mobile-padded" style={{ maxWidth: 1280, margin: '0 auto', padding: '120px 40px' }}>
       <div style={{ marginBottom: 64 }}>
         <div className="section-label" style={{ marginBottom: 16 }}>Our Process</div>
         <h2 className="display-heading" style={{ fontSize: 'clamp(40px, 5vw, 64px)', color: 'white' }}>
@@ -20,9 +20,10 @@ export default function Process() {
         </h2>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 0, position: 'relative' }}>
-        {/* Connecting line */}
+      <div className="responsive-grid-5" style={{ position: 'relative' }}>
+        {/* Connecting line (hidden on mobile) */}
         <div
+          className="hide-mobile"
           style={{
             position: 'absolute', top: 28, left: '10%', right: '10%', height: 1,
             background: 'linear-gradient(90deg, transparent, #232323 20%, #232323 80%, transparent)',

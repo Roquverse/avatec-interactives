@@ -252,3 +252,165 @@ body {
   border-color: rgba(171, 9, 36, 0.25);
   transform: translateY(-3px);
 }
+
+/* ==========================================================================
+   Responsive Utilities & Layout Overrides
+   ========================================================================== */
+
+/* Base overrides for better mobile behavior */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Responsive Grid Containers */
+.responsive-grid {
+  display: grid;
+  gap: 40px;
+}
+.responsive-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
+}
+.responsive-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+}
+.responsive-grid-5 {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0px;
+}
+
+/* Hero Section */
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 0;
+  align-items: center;
+}
+.hero-image-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-right: -48px;
+  overflow: visible;
+}
+.hero-image {
+  width: 160%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  filter: drop-shadow(0 40px 100px rgba(107,15,26,0.35));
+}
+
+/* Project Detail / Editorial Grid */
+.editorial-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 60px;
+}
+.editorial-sticky {
+  position: sticky;
+  top: 120px;
+  align-self: start;
+}
+.editorial-gallery-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 40px;
+  height: 70vh;
+}
+
+/* Common Mobile Stacking */
+.stack-mobile {
+  display: flex;
+  flex-direction: row;
+}
+
+/* --- Media Queries --- */
+@media (max-width: 1024px) {
+  .hero-grid {
+    grid-template-columns: 1fr 1.2fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .display-heading {
+    font-size: clamp(32px, 8vw, 48px) !important;
+  }
+
+  /* Grids */
+  .responsive-grid-2, .responsive-grid-3, .responsive-grid, .responsive-grid-5 {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+  
+  /* Hero */
+  .hero-grid {
+    grid-template-columns: 1fr !important;
+    gap: 40px;
+    padding: 20px !important;
+    text-align: center;
+  }
+  .hero-grid .hero-content {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+  }
+  .hero-image-wrapper {
+    margin-right: 0;
+    justify-content: center;
+  }
+  .hero-image {
+    width: 100%;
+  }
+
+  /* Featured Work */
+  .featured-work-right-column {
+    margin-top: 0 !important;
+  }
+
+  /* Project Detail */
+  .editorial-sticky {
+    position: static;
+    top: auto;
+  }
+  .editorial-gallery-grid {
+    grid-template-columns: 1fr;
+    height: auto;
+    gap: 20px;
+  }
+  .editorial-gallery-grid > div {
+    height: 40vh !important;
+  }
+
+  /* Stacking */
+  .stack-mobile {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 24px !important;
+  }
+  
+  /* Nav and generic padding */
+  .mobile-padded {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+  .hide-mobile {
+    display: none !important;
+  }
+  .show-mobile {
+    display: block !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .show-mobile {
+    display: none !important;
+  }
+}
+

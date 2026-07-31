@@ -72,7 +72,7 @@ export default function ProjectDetail() {
     <div style={{ background: '#050505' }}>
       
       {/* Hero Section */}
-      <section style={{ paddingTop: 160, paddingBottom: 64, px: 20, textAlign: 'center', maxWidth: 1080, margin: '0 auto' }}>
+      <section className="mobile-padded" style={{ paddingTop: 160, paddingBottom: 64, paddingLeft: 20, paddingRight: 20, textAlign: 'center', maxWidth: 1080, margin: '0 auto' }}>
         <Link to="/work" style={{ color: '#a3a3a3', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 40, fontSize: 14, fontFamily: 'Inter' }}>
           ← Back to Work
         </Link>
@@ -100,9 +100,9 @@ export default function ProjectDetail() {
 
       {/* About Section */}
       {project.projectInfo && (
-        <section style={{ maxWidth: 1440, margin: '0 auto', padding: '120px 40px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 60 }}>
-            <div style={{ position: 'sticky', top: 120, alignSelf: 'start' }}>
+        <section className="mobile-padded" style={{ maxWidth: 1440, margin: '0 auto', padding: '120px 40px' }}>
+          <div className="editorial-grid">
+            <div className="editorial-sticky">
               <h2 className="display-heading" style={{ fontSize: 40, color: 'white' }}>About</h2>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 40 }}>
@@ -132,7 +132,7 @@ export default function ProjectDetail() {
 
       {/* Gallery Image 1 (if available) */}
       {project.gallery && project.gallery.length > 0 && (
-        <section style={{ maxWidth: 1440, margin: '0 auto', padding: '0 40px 120px' }}>
+        <section className="mobile-padded" style={{ maxWidth: 1440, margin: '0 auto', padding: '0 40px 120px' }}>
           <div style={{ borderRadius: 32, overflow: 'hidden', height: '70vh' }}>
             <img 
               src={project.gallery[0]} 
@@ -145,9 +145,9 @@ export default function ProjectDetail() {
 
       {/* Challenge Section */}
       {project.challenges && (
-        <section style={{ maxWidth: 1440, margin: '0 auto', padding: '0 40px 120px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 60 }}>
-            <div style={{ position: 'sticky', top: 120, alignSelf: 'start' }}>
+        <section className="mobile-padded" style={{ maxWidth: 1440, margin: '0 auto', padding: '0 40px 120px' }}>
+          <div className="editorial-grid">
+            <div className="editorial-sticky">
               <h2 className="display-heading" style={{ fontSize: 40, color: 'white' }}>Challenge</h2>
             </div>
             <div>
@@ -161,8 +161,8 @@ export default function ProjectDetail() {
 
       {/* Gallery Image 2 & 3 (Asymmetric Grid) */}
       {project.gallery && project.gallery.length > 2 && (
-        <section style={{ maxWidth: 1440, margin: '0 auto', padding: '0 40px 120px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: 40, height: '70vh' }}>
+        <section className="mobile-padded" style={{ maxWidth: 1440, margin: '0 auto', padding: '0 40px 120px' }}>
+          <div className="editorial-gallery-grid">
             <div style={{ borderRadius: 32, overflow: 'hidden', height: '100%' }}>
               <img 
                 src={project.gallery[1]} 
@@ -183,9 +183,9 @@ export default function ProjectDetail() {
 
       {/* Scope of Work Section */}
       {project.scopeOfWork && (
-        <section style={{ maxWidth: 1440, margin: '0 auto', padding: '0 40px 120px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 60 }}>
-            <div style={{ position: 'sticky', top: 120, alignSelf: 'start' }}>
+        <section className="mobile-padded" style={{ maxWidth: 1440, margin: '0 auto', padding: '0 40px 120px' }}>
+          <div className="editorial-grid">
+            <div className="editorial-sticky">
               <h2 className="display-heading" style={{ fontSize: 40, color: 'white' }}>Scope of work</h2>
             </div>
             <div>
@@ -199,9 +199,9 @@ export default function ProjectDetail() {
 
       {/* Outcome Section */}
       {project.outcome && (
-        <section style={{ maxWidth: 1440, margin: '0 auto', padding: '0 40px 120px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 60 }}>
-            <div style={{ position: 'sticky', top: 120, alignSelf: 'start' }}>
+        <section className="mobile-padded" style={{ maxWidth: 1440, margin: '0 auto', padding: '0 40px 120px' }}>
+          <div className="editorial-grid">
+            <div className="editorial-sticky">
               <h2 className="display-heading" style={{ fontSize: 40, color: 'white' }}>Solution</h2>
             </div>
             <div>

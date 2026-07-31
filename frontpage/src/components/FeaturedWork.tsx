@@ -109,7 +109,7 @@ export default function FeaturedWork() {
   }
 
   return (
-    <section style={{ maxWidth: 1280, margin: '0 auto', padding: '120px 40px' }}>
+    <section className="mobile-padded" style={{ maxWidth: 1280, margin: '0 auto', padding: '120px 40px' }}>
       <div style={{ marginBottom: 64 }}>
         <div className="section-label" style={{ marginBottom: 16 }}>Featured Work</div>
         <h2 className="display-heading" style={{ fontSize: 'clamp(40px, 5vw, 64px)', color: 'white', maxWidth: 520 }}>
@@ -117,14 +117,14 @@ export default function FeaturedWork() {
         </h2>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 40, alignItems: 'start' }}>
+      <div className="responsive-grid-2" style={{ alignItems: 'start' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 40 }}>
           {leftColumnProjects.map((project, index) => (
             <ProjectCard key={project.id || `left-${index}`} project={project} />
           ))}
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 40, marginTop: 180 }}>
+        <div className="featured-work-right-column" style={{ display: 'flex', flexDirection: 'column', gap: 40, marginTop: 180 }}>
           {rightColumnProjects.map((project, index) => (
             <ProjectCard key={project.id || `right-${index}`} project={project} />
           ))}

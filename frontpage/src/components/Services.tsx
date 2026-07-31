@@ -32,9 +32,9 @@ export default function Services() {
   const services = Object.keys(serviceIcons)
 
   return (
-    <section style={{ background: 'linear-gradient(160deg, #08071a 0%, #0d0b22 40%, #0b0918 75%, #06050f 100%)', borderTop: '1px solid #232323', borderBottom: '1px solid #232323' }}>
+    <section className="mobile-padded" style={{ background: 'linear-gradient(160deg, #08071a 0%, #0d0b22 40%, #0b0918 75%, #06050f 100%)', borderTop: '1px solid #232323', borderBottom: '1px solid #232323' }}>
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '120px 40px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 64, flexWrap: 'wrap', gap: 24 }}>
+        <div className="stack-mobile" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 64, flexWrap: 'wrap', gap: 24 }}>
           <div>
             <div className="section-label" style={{ marginBottom: 16 }}>Services</div>
             <h2 className="display-heading" style={{ fontSize: 'clamp(40px, 5vw, 64px)', color: 'white' }}>
@@ -46,7 +46,7 @@ export default function Services() {
           </p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gridAutoRows: '280px', gap: 16 }}>
+        <div className="responsive-grid-3">
           {services.map((svc, i) => {
             const l = layout[i]
             return (
@@ -55,8 +55,6 @@ export default function Services() {
                 to={`/services/${svc.toLowerCase().replace(/ & /g, '-').replace(/[\s\/]+/g, '-')}`}
                 className="service-card"
                 style={{
-                  gridColumn: `span ${l.cols}`,
-                  gridRow: `span ${l.rows}`,
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between',
