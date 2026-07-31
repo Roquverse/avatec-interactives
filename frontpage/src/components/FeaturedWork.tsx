@@ -79,7 +79,8 @@ export default function FeaturedWork() {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
+        const configuredUrl = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
+        const apiUrl = configuredUrl.endsWith('/api') ? configuredUrl : `${configuredUrl.replace(/\/$/, '')}/api`;
         const response = await fetch(`${apiUrl}/projects`);
         if (response.ok) {
           const data = await response.json();
