@@ -53,7 +53,7 @@ export const getProject = async (req: Request<{ id: string }>, res: Response) =>
 
 export const createProject = async (req: Request, res: Response) => {
   try {
-    const { name, description, status, clientId, imageUrl, websiteUrl, tags, companyName, country, category } = req.body;
+    const { name, description, status, clientId, imageUrl, websiteUrl, tags, companyName, country, category, projectInfo, challenges, outcome } = req.body;
     const project = await prisma.project.create({
       data: {
         name,
@@ -66,6 +66,9 @@ export const createProject = async (req: Request, res: Response) => {
         companyName,
         country,
         category,
+        projectInfo,
+        challenges,
+        outcome,
       },
     });
 
@@ -79,7 +82,7 @@ export const createProject = async (req: Request, res: Response) => {
 export const updateProject = async (req: Request<{ id: string }>, res: Response) => {
   try {
     const { id } = req.params;
-    const { name, description, status, clientId, imageUrl, websiteUrl, tags, companyName, country, category } = req.body;
+    const { name, description, status, clientId, imageUrl, websiteUrl, tags, companyName, country, category, projectInfo, challenges, outcome } = req.body;
     const project = await prisma.project.update({
       where: { id },
       data: {
@@ -93,6 +96,9 @@ export const updateProject = async (req: Request<{ id: string }>, res: Response)
         companyName,
         country,
         category,
+        projectInfo,
+        challenges,
+        outcome,
       },
     });
 

@@ -38,6 +38,9 @@ model Project {
   endDate     DateTime?
   progress    Int      @default(0)
   isPortfolio Boolean  @default(false)
+  projectInfo String?
+  challenges  String?
+  outcome     String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }

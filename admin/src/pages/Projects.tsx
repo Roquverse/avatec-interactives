@@ -17,7 +17,10 @@ const Projects = () => {
     status: 'ACTIVE',
     imageUrl: '',
     websiteUrl: '',
-    tags: ''
+    tags: '',
+    projectInfo: '',
+    challenges: '',
+    outcome: ''
   });
 
   const fetchProjects = async () => {
@@ -77,7 +80,7 @@ const Projects = () => {
       setEditingId(null);
       setImageFile(null);
       setFormData({
-        name: '', description: '', status: 'ACTIVE', imageUrl: '', websiteUrl: '', tags: ''
+        name: '', description: '', status: 'ACTIVE', imageUrl: '', websiteUrl: '', tags: '', projectInfo: '', challenges: '', outcome: ''
       });
       await fetchProjects();
     } catch (error) {
@@ -95,7 +98,10 @@ const Projects = () => {
       status: project.status || 'ACTIVE',
       imageUrl: project.imageUrl || '',
       websiteUrl: project.websiteUrl || '',
-      tags: project.tags ? project.tags.join(', ') : ''
+      tags: project.tags ? project.tags.join(', ') : '',
+      projectInfo: project.projectInfo || '',
+      challenges: project.challenges || '',
+      outcome: project.outcome || ''
     });
     setEditingId(project.id);
     setImageFile(null);
@@ -137,7 +143,7 @@ const Projects = () => {
             setEditingId(null);
             setImageFile(null);
             setFormData({
-              name: '', description: '', status: 'ACTIVE', imageUrl: '', websiteUrl: '', tags: ''
+              name: '', description: '', status: 'ACTIVE', imageUrl: '', websiteUrl: '', tags: '', projectInfo: '', challenges: '', outcome: ''
             });
             setShowModal(true);
           }}
@@ -294,11 +300,44 @@ const Projects = () => {
               </div>
 
               <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Description</label>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Description (Short)</label>
                 <textarea 
                   name="description" 
-                  rows={3}
+                  rows={2}
                   value={formData.description}
+                  onChange={handleInputChange}
+                  style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', resize: 'vertical' }}
+                />
+              </div>
+
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Project Info (Detailed)</label>
+                <textarea 
+                  name="projectInfo" 
+                  rows={4}
+                  value={formData.projectInfo}
+                  onChange={handleInputChange}
+                  style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', resize: 'vertical' }}
+                />
+              </div>
+
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Challenges</label>
+                <textarea 
+                  name="challenges" 
+                  rows={3}
+                  value={formData.challenges}
+                  onChange={handleInputChange}
+                  style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', resize: 'vertical' }}
+                />
+              </div>
+
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Outcome / Results</label>
+                <textarea 
+                  name="outcome" 
+                  rows={3}
+                  value={formData.outcome}
                   onChange={handleInputChange}
                   style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', resize: 'vertical' }}
                 />
