@@ -4,7 +4,7 @@ import { PrismaClient } from '@prisma/client';
 import dotenv from 'dotenv';
 import path from 'path';
 
-dotenv.config({ path: path.resolve(__dirname, '.env') });
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const connectionString = process.env.DATABASE_URL || 'postgres://postgres:postgres@localhost:51214/template1';
 
