@@ -12,7 +12,7 @@ import path from 'path';
 import { authenticateToken } from './middleware/authMiddleware';
 
 const app: Express = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5001;
 
 // Middleware
 app.use(cors());
