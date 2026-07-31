@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 type Project = {
   id: string;
@@ -64,9 +65,9 @@ function ProjectCard({ project }: { project: Project }) {
             </span>
           ))}
         </div>
-        <button className="btn-ghost" style={{ fontSize: 14, padding: '10px 22px', width: '100%', justifyContent: 'center', marginTop: 8 }}>
+        <Link to={`/work/${project.id}`} className="btn-ghost" style={{ fontSize: 14, padding: '10px 22px', width: '100%', justifyContent: 'center', marginTop: 8, textDecoration: 'none', display: 'flex' }}>
           View case study →
-        </button>
+        </Link>
       </div>
     </div>
   )
