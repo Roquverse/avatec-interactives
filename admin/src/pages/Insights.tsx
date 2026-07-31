@@ -97,7 +97,7 @@ export default function Insights() {
         <h1 className="page-title">INSIGHTS</h1>
         <button 
           onClick={openNewModal}
-          style={{ background: 'var(--accent-primary)', color: 'white', border: 'none', padding: '10px 20px', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontWeight: 600 }}
+          style={{ background: 'var(--accent-primary)', color: 'var(--text-primary)', border: 'none', padding: '10px 20px', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontWeight: 600 }}
         >
           <Plus size={18} /> New Post
         </button>
@@ -132,7 +132,7 @@ export default function Insights() {
                   <td>
                     <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
                       {post.tags?.map((tag: string) => (
-                        <span key={tag} style={{ background: 'rgba(255,255,255,0.1)', padding: '2px 8px', borderRadius: '12px', fontSize: '12px', color: 'var(--text-secondary)' }}>
+                        <span key={tag} style={{ background: 'var(--glass-border)', padding: '2px 8px', borderRadius: '12px', fontSize: '12px', color: 'var(--text-secondary)' }}>
                           {tag}
                         </span>
                       ))}
@@ -170,12 +170,12 @@ export default function Insights() {
       </div>
 
       {isModalOpen && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 40 }}>
-          <div style={{ background: 'var(--bg-secondary)', width: '100%', maxWidth: '700px', maxHeight: '90vh', borderRadius: '24px', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        <div style={{ position: 'fixed', inset: 0, background: 'var(--overlay-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 40 }}>
+          <div style={{ background: 'var(--bg-secondary)', width: '100%', maxWidth: '700px', maxHeight: '90vh', borderRadius: '24px', border: '1px solid var(--glass-border)', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
             
-            <div style={{ padding: '24px 32px', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h2 style={{ margin: 0, color: 'white', fontSize: '20px' }}>{editingPost ? 'Edit Post' : 'New Post'}</h2>
-              <button onClick={closeModal} style={{ background: 'transparent', border: 'none', color: '#a3a3a3', cursor: 'pointer' }}>Close</button>
+            <div style={{ padding: '24px 32px', borderBottom: '1px solid var(--glass-bg)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <h2 style={{ margin: 0, color: 'var(--text-primary)', fontSize: '20px' }}>{editingPost ? 'Edit Post' : 'New Post'}</h2>
+              <button onClick={closeModal} style={{ background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}>Close</button>
             </div>
 
             <div style={{ padding: '32px', overflowY: 'auto', flex: 1 }}>
@@ -187,7 +187,7 @@ export default function Insights() {
                     type="text" 
                     value={title} 
                     onChange={e => setTitle(e.target.value)} 
-                    style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '12px', borderRadius: '8px', color: 'white', outline: 'none' }}
+                    style={{ background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', padding: '12px', borderRadius: '8px', color: 'var(--text-primary)', outline: 'none' }}
                   />
                 </div>
 
@@ -198,7 +198,7 @@ export default function Insights() {
                       type="text" 
                       value={author} 
                       onChange={e => setAuthor(e.target.value)} 
-                      style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '12px', borderRadius: '8px', color: 'white', outline: 'none' }}
+                      style={{ background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', padding: '12px', borderRadius: '8px', color: 'var(--text-primary)', outline: 'none' }}
                     />
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: 1 }}>
@@ -207,7 +207,7 @@ export default function Insights() {
                       type="text" 
                       value={tags} 
                       onChange={e => setTags(e.target.value)} 
-                      style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '12px', borderRadius: '8px', color: 'white', outline: 'none' }}
+                      style={{ background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', padding: '12px', borderRadius: '8px', color: 'var(--text-primary)', outline: 'none' }}
                     />
                   </div>
                 </div>
@@ -218,7 +218,7 @@ export default function Insights() {
                     value={content} 
                     onChange={e => setContent(e.target.value)} 
                     rows={8}
-                    style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '12px', borderRadius: '8px', color: 'white', outline: 'none', resize: 'vertical' }}
+                    style={{ background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', padding: '12px', borderRadius: '8px', color: 'var(--text-primary)', outline: 'none', resize: 'vertical' }}
                   />
                 </div>
 
@@ -230,14 +230,14 @@ export default function Insights() {
                     onChange={e => setPublished(e.target.checked)}
                     style={{ width: '18px', height: '18px', accentColor: 'var(--accent-primary)' }}
                   />
-                  <label htmlFor="published" style={{ color: 'white', cursor: 'pointer' }}>Publish this post immediately</label>
+                  <label htmlFor="published" style={{ color: 'var(--text-primary)', cursor: 'pointer' }}>Publish this post immediately</label>
                 </div>
               </form>
             </div>
 
-            <div style={{ padding: '24px 32px', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'flex-end', gap: '16px' }}>
-              <button onClick={closeModal} style={{ background: 'transparent', color: 'var(--text-secondary)', border: '1px solid rgba(255,255,255,0.1)', padding: '10px 24px', borderRadius: '8px', cursor: 'pointer', fontWeight: 500 }}>Cancel</button>
-              <button form="post-form" type="submit" style={{ background: 'var(--accent-primary)', color: 'white', border: 'none', padding: '10px 24px', borderRadius: '8px', cursor: 'pointer', fontWeight: 600 }}>Save Post</button>
+            <div style={{ padding: '24px 32px', borderTop: '1px solid var(--glass-bg)', display: 'flex', justifyContent: 'flex-end', gap: '16px' }}>
+              <button onClick={closeModal} style={{ background: 'transparent', color: 'var(--text-secondary)', border: '1px solid var(--glass-border)', padding: '10px 24px', borderRadius: '8px', cursor: 'pointer', fontWeight: 500 }}>Cancel</button>
+              <button form="post-form" type="submit" style={{ background: 'var(--accent-primary)', color: 'var(--text-primary)', border: 'none', padding: '10px 24px', borderRadius: '8px', cursor: 'pointer', fontWeight: 600 }}>Save Post</button>
             </div>
           </div>
         </div>

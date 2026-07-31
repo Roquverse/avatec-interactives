@@ -25,7 +25,7 @@ const Clients = () => {
       <div className="page-header">
         <h1 className="page-title">CLIENTS</h1>
         <button 
-          style={{ background: 'var(--accent-primary)', color: 'white', border: 'none', padding: '10px 20px', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontWeight: 600 }}
+          style={{ background: 'var(--accent-primary)', color: 'var(--text-primary)', border: 'none', padding: '10px 20px', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontWeight: 600 }}
         >
           <Plus size={18} /> Add Client
         </button>

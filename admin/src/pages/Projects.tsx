@@ -126,12 +126,12 @@ export default function Projects() {
     ];
   };
 
-  if (loading) return <div style={{ padding: 40, color: 'white' }}>Loading board...</div>;
+  if (loading) return <div style={{ padding: 40, color: 'var(--text-primary)' }}>Loading board...</div>;
 
   return (
     <div style={{ padding: '32px', height: '100%', display: 'flex', flexDirection: 'column' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
-        <h1 style={{ fontSize: '24px', fontWeight: 600, color: 'white', margin: 0 }}>Project Board</h1>
+        <h1 style={{ fontSize: '24px', fontWeight: 600, color: 'var(--text-primary)', margin: 0 }}>Project Board</h1>
         <button 
           onClick={createProject}
           style={{ background: 'white', color: 'black', border: 'none', padding: '10px 20px', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontWeight: 500 }}
@@ -142,10 +142,10 @@ export default function Projects() {
 
       <div style={{ display: 'flex', gap: '24px', flex: 1, overflowX: 'auto', paddingBottom: '16px' }}>
         {getColumns().map(col => (
-          <div key={col.id} style={{ minWidth: '320px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '16px', padding: '20px', display: 'flex', flexDirection: 'column' }}>
-            <h3 style={{ margin: '0 0 20px 0', color: '#a3a3a3', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div key={col.id} style={{ minWidth: '320px', background: 'var(--glass-very-subtle)', border: '1px solid var(--glass-bg)', borderRadius: '16px', padding: '20px', display: 'flex', flexDirection: 'column' }}>
+            <h3 style={{ margin: '0 0 20px 0', color: 'var(--text-secondary)', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               {col.title}
-              <span style={{ background: 'rgba(255,255,255,0.1)', padding: '2px 8px', borderRadius: '12px', fontSize: '12px' }}>
+              <span style={{ background: 'var(--glass-border)', padding: '2px 8px', borderRadius: '12px', fontSize: '12px' }}>
                 {projects.filter(p => p.status === col.id).length}
               </span>
             </h3>
@@ -155,18 +155,18 @@ export default function Projects() {
                 <div 
                   key={project.id} 
                   onClick={() => { setSelectedProject(project); setIsModalOpen(true); }}
-                  style={{ background: 'var(--bg-primary)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '16px', cursor: 'pointer', position: 'relative' }}
+                  style={{ background: 'var(--bg-primary)', border: '1px solid var(--glass-border)', borderRadius: '12px', padding: '16px', cursor: 'pointer', position: 'relative' }}
                 >
-                  <h4 style={{ margin: '0 0 12px 0', color: 'white', fontSize: '16px' }}>{project.name}</h4>
+                  <h4 style={{ margin: '0 0 12px 0', color: 'var(--text-primary)', fontSize: '16px' }}>{project.name}</h4>
                   
                   {project.client && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#a3a3a3', fontSize: '13px', marginBottom: '12px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-secondary)', fontSize: '13px', marginBottom: '12px' }}>
                       <Users size={14} />
                       {project.client.name}
                     </div>
                   )}
 
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: '#888', fontSize: '12px', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '12px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: '#888', fontSize: '12px', borderTop: '1px solid var(--glass-bg)', paddingTop: '12px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                       <CheckSquare size={14} />
                       {project.tasks?.filter((t:any) => t.status === 'DONE').length || 0} / {project.tasks?.length || 0}
@@ -186,11 +186,11 @@ export default function Projects() {
 
       {/* Project Modal */}
       {isModalOpen && selectedProject && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 40 }}>
-          <div style={{ background: 'var(--bg-secondary)', width: '100%', maxWidth: '800px', maxHeight: '90vh', borderRadius: '24px', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        <div style={{ position: 'fixed', inset: 0, background: 'var(--overlay-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 40 }}>
+          <div style={{ background: 'var(--bg-secondary)', width: '100%', maxWidth: '800px', maxHeight: '90vh', borderRadius: '24px', border: '1px solid var(--glass-border)', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
             
-            <div style={{ padding: '24px 32px', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h2 style={{ margin: 0, color: 'white', fontSize: '24px' }}>{selectedProject.name}</h2>
+            <div style={{ padding: '24px 32px', borderBottom: '1px solid var(--glass-bg)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <h2 style={{ margin: 0, color: 'var(--text-primary)', fontSize: '24px' }}>{selectedProject.name}</h2>
               <div style={{ display: 'flex', gap: '12px' }}>
                 <select 
                   value={selectedProject.status} 
@@ -198,14 +198,14 @@ export default function Projects() {
                     handleUpdateStatus(selectedProject.id, e.target.value);
                     setSelectedProject({...selectedProject, status: e.target.value});
                   }}
-                  style={{ background: 'rgba(255,255,255,0.1)', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '8px', outline: 'none' }}
+                  style={{ background: 'var(--glass-border)', color: 'var(--text-primary)', border: 'none', padding: '8px 16px', borderRadius: '8px', outline: 'none' }}
                 >
                   <option value="PLANNED">Planned</option>
                   <option value="EDIT">Edit</option>
                   <option value="ACTIVE">Active</option>
                   <option value="COMPLETED">Completed</option>
                 </select>
-                <button onClick={() => setIsModalOpen(false)} style={{ background: 'transparent', border: 'none', color: '#a3a3a3', cursor: 'pointer' }}>Close</button>
+                <button onClick={() => setIsModalOpen(false)} style={{ background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}>Close</button>
               </div>
             </div>
 
@@ -213,7 +213,7 @@ export default function Projects() {
               
               {/* Left Column: Tasks */}
               <div>
-                <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'white', fontSize: '18px', marginTop: 0, marginBottom: '24px' }}>
+                <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-primary)', fontSize: '18px', marginTop: 0, marginBottom: '24px' }}>
                   <CheckSquare size={20} color="#ab0924" /> Tasks
                 </h3>
                 
@@ -242,7 +242,7 @@ export default function Projects() {
                     value={newTaskTitle}
                     onChange={(e) => setNewTaskTitle(e.target.value)}
                     placeholder="Add a new task..." 
-                    style={{ flex: 1, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '12px 16px', borderRadius: '8px', color: 'white' }}
+                    style={{ flex: 1, background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', padding: '12px 16px', borderRadius: '8px', color: 'var(--text-primary)' }}
                   />
                   <button type="submit" style={{ background: 'white', color: 'black', border: 'none', padding: '0 20px', borderRadius: '8px', fontWeight: 500, cursor: 'pointer' }}>Add</button>
                 </form>
@@ -253,20 +253,20 @@ export default function Projects() {
                 
                 {/* Publish to Portfolio */}
                 {selectedProject.status === 'COMPLETED' && !selectedProject.isPortfolio && (
-                  <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '16px', padding: '24px', textAlign: 'center' }}>
+                  <div style={{ background: 'var(--glass-very-subtle)', border: '1px solid var(--glass-bg)', borderRadius: '16px', padding: '24px', textAlign: 'center' }}>
                     <Globe size={32} color="#ab0924" style={{ marginBottom: 12 }} />
-                    <h4 style={{ margin: '0 0 8px 0', color: 'white', fontSize: '16px' }}>Publish to Portfolio</h4>
-                    <p style={{ margin: '0 0 16px 0', fontSize: '13px', color: '#a3a3a3' }}>Make this project visible on the public portfolio.</p>
+                    <h4 style={{ margin: '0 0 8px 0', color: 'var(--text-primary)', fontSize: '16px' }}>Publish to Portfolio</h4>
+                    <p style={{ margin: '0 0 16px 0', fontSize: '13px', color: 'var(--text-secondary)' }}>Make this project visible on the public portfolio.</p>
                     <button 
                       onClick={() => handlePublishPortfolio(selectedProject.id)}
-                      style={{ background: '#ab0924', color: 'white', border: 'none', padding: '10px 16px', borderRadius: '8px', width: '100%', fontWeight: 600, cursor: 'pointer' }}
+                      style={{ background: '#ab0924', color: 'var(--text-primary)', border: 'none', padding: '10px 16px', borderRadius: '8px', width: '100%', fontWeight: 600, cursor: 'pointer' }}
                     >
                       Publish Now
                     </button>
                   </div>
                 )}
                 {selectedProject.isPortfolio && (
-                  <div style={{ background: 'rgba(255,255,255,0.05)', padding: '16px', borderRadius: '12px', textAlign: 'center', color: '#ab0924', fontSize: '14px', fontWeight: 500 }}>
+                  <div style={{ background: 'var(--glass-bg)', padding: '16px', borderRadius: '12px', textAlign: 'center', color: '#ab0924', fontSize: '14px', fontWeight: 500 }}>
                     <Globe size={16} style={{ verticalAlign: 'text-bottom', marginRight: 8 }} />
                     Published to Portfolio
                   </div>
@@ -277,7 +277,7 @@ export default function Projects() {
                   <select 
                     value={selectedProject.clientId || ''}
                     onChange={(e) => updateProjectMeta({ clientId: e.target.value })}
-                    style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '12px', borderRadius: '8px', color: 'white', outline: 'none' }}
+                    style={{ width: '100%', background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', padding: '12px', borderRadius: '8px', color: 'var(--text-primary)', outline: 'none' }}
                   >
                     <option value="">No Client Assigned</option>
                     {clients.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
@@ -291,13 +291,13 @@ export default function Projects() {
                       type="date" 
                       value={selectedProject.startDate ? selectedProject.startDate.split('T')[0] : ''}
                       onChange={(e) => updateProjectMeta({ startDate: e.target.value })}
-                      style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '12px', borderRadius: '8px', color: 'white', colorScheme: 'dark' }}
+                      style={{ width: '100%', background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', padding: '12px', borderRadius: '8px', color: 'var(--text-primary)', colorScheme: 'dark' }}
                     />
                     <input 
                       type="date" 
                       value={selectedProject.endDate ? selectedProject.endDate.split('T')[0] : ''}
                       onChange={(e) => updateProjectMeta({ endDate: e.target.value })}
-                      style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '12px', borderRadius: '8px', color: 'white', colorScheme: 'dark' }}
+                      style={{ width: '100%', background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', padding: '12px', borderRadius: '8px', color: 'var(--text-primary)', colorScheme: 'dark' }}
                     />
                   </div>
                 </div>

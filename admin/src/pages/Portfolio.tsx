@@ -192,7 +192,7 @@ const Portfolio = () => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                borderBottom: '1px solid rgba(255,255,255,0.05)'
+                borderBottom: '1px solid var(--glass-bg)'
               }}>
                 {!project.imageUrl && <ImageIcon size={32} opacity={0.2} />}
               </div>
@@ -211,7 +211,7 @@ const Portfolio = () => {
                     <span key={i} style={{ 
                       fontSize: '0.75rem', 
                       padding: '0.2rem 0.6rem', 
-                      backgroundColor: 'rgba(255,255,255,0.05)', 
+                      backgroundColor: 'var(--glass-bg)', 
                       borderRadius: '4px',
                       color: 'var(--text-secondary)'
                     }}>
@@ -240,12 +240,12 @@ const Portfolio = () => {
                   </a>
                 )}
 
-                <div style={{ display: 'flex', gap: '0.75rem', marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+                <div style={{ display: 'flex', gap: '0.75rem', marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid var(--glass-bg)' }}>
                   <button 
                     onClick={() => handleEdit(project)}
-                    style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', padding: '0.6rem', background: 'rgba(255,255,255,0.05)', border: 'none', borderRadius: '4px', color: 'white', cursor: 'pointer', transition: 'background 0.2s' }}
-                    onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
-                    onMouseOut={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
+                    style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', padding: '0.6rem', background: 'var(--glass-bg)', border: 'none', borderRadius: '4px', color: 'var(--text-primary)', cursor: 'pointer', transition: 'background 0.2s' }}
+                    onMouseOver={(e) => e.currentTarget.style.background = 'var(--glass-border)'}
+                    onMouseOut={(e) => e.currentTarget.style.background = 'var(--glass-bg)'}
                   >
                     <Pencil size={14} /> Edit
                   </button>
@@ -307,7 +307,7 @@ const Portfolio = () => {
                   required
                   value={formData.name}
                   onChange={handleInputChange}
-                  style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
+                  style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'var(--text-primary)' }}
                 />
               </div>
 
@@ -318,7 +318,7 @@ const Portfolio = () => {
                   rows={2}
                   value={formData.description}
                   onChange={handleInputChange}
-                  style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', resize: 'vertical' }}
+                  style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'var(--text-primary)', resize: 'vertical' }}
                 />
               </div>
 
@@ -331,7 +331,7 @@ const Portfolio = () => {
                     placeholder="e.g. B2B Platform"
                     value={formData.projectType}
                     onChange={handleInputChange}
-                    style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
+                    style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'var(--text-primary)' }}
                   />
                 </div>
                 <div>
@@ -342,7 +342,7 @@ const Portfolio = () => {
                     placeholder="e.g. Fintech"
                     value={formData.industry}
                     onChange={handleInputChange}
-                    style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
+                    style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'var(--text-primary)' }}
                   />
                 </div>
                 <div>
@@ -353,7 +353,7 @@ const Portfolio = () => {
                     placeholder="e.g. Web & API"
                     value={formData.platform}
                     onChange={handleInputChange}
-                    style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
+                    style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'var(--text-primary)' }}
                   />
                 </div>
               </div>
@@ -365,7 +365,7 @@ const Portfolio = () => {
                   rows={4}
                   value={formData.projectInfo}
                   onChange={handleInputChange}
-                  style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', resize: 'vertical' }}
+                  style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'var(--text-primary)', resize: 'vertical' }}
                 />
               </div>
 
@@ -376,7 +376,7 @@ const Portfolio = () => {
                   rows={3}
                   value={formData.challenges}
                   onChange={handleInputChange}
-                  style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', resize: 'vertical' }}
+                  style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'var(--text-primary)', resize: 'vertical' }}
                 />
               </div>
 
@@ -387,7 +387,7 @@ const Portfolio = () => {
                   rows={3}
                   value={formData.outcome}
                   onChange={handleInputChange}
-                  style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', resize: 'vertical' }}
+                  style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'var(--text-primary)', resize: 'vertical' }}
                 />
               </div>
 
@@ -398,7 +398,7 @@ const Portfolio = () => {
                   rows={3}
                   value={formData.scopeOfWork}
                   onChange={handleInputChange}
-                  style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', resize: 'vertical' }}
+                  style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'var(--text-primary)', resize: 'vertical' }}
                 />
               </div>
 
@@ -409,7 +409,7 @@ const Portfolio = () => {
                     name="status"
                     value={formData.status}
                     onChange={handleInputChange}
-                    style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
+                    style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'var(--text-primary)' }}
                   >
                     <option value="ACTIVE">Active</option>
                     <option value="PLANNED">Planned</option>
@@ -429,7 +429,7 @@ const Portfolio = () => {
                         setImageFile(e.target.files[0]);
                       }
                     }}
-                    style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
+                    style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'var(--text-primary)' }}
                   />
                   <div style={{ textAlign: 'center', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>OR</div>
                   <input 
@@ -438,7 +438,7 @@ const Portfolio = () => {
                     placeholder="Image URL (e.g., https://example.com/image.png)"
                     value={formData.imageUrl}
                     onChange={handleInputChange}
-                    style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
+                    style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'var(--text-primary)' }}
                   />
                 </div>
               </div>
@@ -451,7 +451,7 @@ const Portfolio = () => {
                   placeholder="https://myproject.com"
                   value={formData.websiteUrl}
                   onChange={handleInputChange}
-                  style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
+                  style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'var(--text-primary)' }}
                 />
               </div>
 
@@ -463,7 +463,7 @@ const Portfolio = () => {
                   placeholder="React, UI/UX, Node.js"
                   value={formData.tags}
                   onChange={handleInputChange}
-                  style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
+                  style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'var(--text-primary)' }}
                 />
               </div>
 
@@ -475,7 +475,7 @@ const Portfolio = () => {
                   placeholder="https://image1.png, https://image2.png"
                   value={formData.gallery}
                   onChange={handleInputChange}
-                  style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
+                  style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'var(--text-primary)' }}
                 />
               </div>
 
@@ -487,7 +487,7 @@ const Portfolio = () => {
                     setEditingId(null);
                     setImageFile(null);
                   }}
-                  style={{ padding: '0.75rem 1.5rem', background: 'none', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '6px', cursor: 'pointer' }}
+                  style={{ padding: '0.75rem 1.5rem', background: 'none', border: '1px solid var(--glass-border)', color: 'var(--text-primary)', borderRadius: '6px', cursor: 'pointer' }}
                 >
                   Cancel
                 </button>

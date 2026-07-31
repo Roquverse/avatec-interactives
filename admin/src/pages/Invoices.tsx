@@ -149,7 +149,7 @@ export default function Invoices() {
         <h1 className="page-title">INVOICES</h1>
         <button 
           onClick={openNewModal}
-          style={{ background: 'var(--accent-primary)', color: 'white', border: 'none', padding: '10px 20px', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontWeight: 600 }}
+          style={{ background: 'var(--accent-primary)', color: 'var(--text-primary)', border: 'none', padding: '10px 20px', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontWeight: 600 }}
         >
           <Plus size={18} /> New Invoice
         </button>
@@ -217,12 +217,12 @@ export default function Invoices() {
       </div>
 
       {isModalOpen && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 40 }}>
-          <div style={{ background: 'var(--bg-secondary)', width: '100%', maxWidth: '800px', maxHeight: '90vh', borderRadius: '24px', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        <div style={{ position: 'fixed', inset: 0, background: 'var(--overlay-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 40 }}>
+          <div style={{ background: 'var(--bg-secondary)', width: '100%', maxWidth: '800px', maxHeight: '90vh', borderRadius: '24px', border: '1px solid var(--glass-border)', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
             
-            <div style={{ padding: '24px 32px', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h2 style={{ margin: 0, color: 'white', fontSize: '20px' }}>{editingInvoice ? 'Edit Invoice' : 'New Invoice'}</h2>
-              <button onClick={closeModal} style={{ background: 'transparent', border: 'none', color: '#a3a3a3', cursor: 'pointer' }}>Close</button>
+            <div style={{ padding: '24px 32px', borderBottom: '1px solid var(--glass-bg)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <h2 style={{ margin: 0, color: 'var(--text-primary)', fontSize: '20px' }}>{editingInvoice ? 'Edit Invoice' : 'New Invoice'}</h2>
+              <button onClick={closeModal} style={{ background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}>Close</button>
             </div>
 
             <div style={{ padding: '32px', overflowY: 'auto', flex: 1 }}>
@@ -235,7 +235,7 @@ export default function Invoices() {
                       required
                       value={clientId} 
                       onChange={e => setClientId(e.target.value)} 
-                      style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '12px', borderRadius: '8px', color: 'white', outline: 'none' }}
+                      style={{ background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', padding: '12px', borderRadius: '8px', color: 'var(--text-primary)', outline: 'none' }}
                     >
                       <option value="" disabled style={{ color: 'black' }}>Select a client</option>
                       {clients.map(client => (
@@ -249,7 +249,7 @@ export default function Invoices() {
                     <select 
                       value={status} 
                       onChange={e => setStatus(e.target.value)} 
-                      style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '12px', borderRadius: '8px', color: 'white', outline: 'none' }}
+                      style={{ background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', padding: '12px', borderRadius: '8px', color: 'var(--text-primary)', outline: 'none' }}
                     >
                       <option value="DRAFT" style={{ color: 'black' }}>Draft</option>
                       <option value="PENDING" style={{ color: 'black' }}>Pending</option>
@@ -265,7 +265,7 @@ export default function Invoices() {
                       type="date" 
                       value={dueDate} 
                       onChange={e => setDueDate(e.target.value)} 
-                      style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '12px', borderRadius: '8px', color: 'white', outline: 'none', colorScheme: 'dark' }}
+                      style={{ background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', padding: '12px', borderRadius: '8px', color: 'var(--text-primary)', outline: 'none', colorScheme: 'dark' }}
                     />
                   </div>
 
@@ -279,7 +279,7 @@ export default function Invoices() {
                         step="0.01"
                         value={amount} 
                         onChange={e => setAmount(e.target.value)} 
-                        style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '12px 12px 12px 32px', borderRadius: '8px', color: 'white', outline: 'none', width: '100%' }}
+                        style={{ background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', padding: '12px 12px 12px 32px', borderRadius: '8px', color: 'var(--text-primary)', outline: 'none', width: '100%' }}
                       />
                     </div>
                   </div>
@@ -296,7 +296,7 @@ export default function Invoices() {
                   
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                     {lineItems.map((item, index) => (
-                      <div key={index} style={{ display: 'flex', gap: '16px', alignItems: 'center', background: 'rgba(255,255,255,0.02)', padding: '16px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                      <div key={index} style={{ display: 'flex', gap: '16px', alignItems: 'center', background: 'var(--glass-very-subtle)', padding: '16px', borderRadius: '12px', border: '1px solid var(--glass-bg)' }}>
                         <div style={{ flex: 2, display: 'flex', flexDirection: 'column', gap: '6px' }}>
                           <label style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Description</label>
                           <input 
@@ -304,7 +304,7 @@ export default function Invoices() {
                             value={item.description}
                             onChange={e => handleLineItemChange(index, 'description', e.target.value)}
                             placeholder="Service or item description"
-                            style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.1)', padding: '8px 12px', borderRadius: '6px', color: 'white', outline: 'none' }}
+                            style={{ background: 'transparent', border: '1px solid var(--glass-border)', padding: '8px 12px', borderRadius: '6px', color: 'var(--text-primary)', outline: 'none' }}
                           />
                         </div>
                         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px' }}>
@@ -315,7 +315,7 @@ export default function Invoices() {
                             value={item.amount || ''}
                             onChange={e => handleLineItemChange(index, 'amount', parseFloat(e.target.value))}
                             placeholder="0.00"
-                            style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.1)', padding: '8px 12px', borderRadius: '6px', color: 'white', outline: 'none' }}
+                            style={{ background: 'transparent', border: '1px solid var(--glass-border)', padding: '8px 12px', borderRadius: '6px', color: 'var(--text-primary)', outline: 'none' }}
                           />
                         </div>
                         <button type="button" onClick={() => removeLineItem(index)} style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', marginTop: '18px' }} title="Remove item">
@@ -329,9 +329,9 @@ export default function Invoices() {
               </form>
             </div>
 
-            <div style={{ padding: '24px 32px', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', justifyContent: 'flex-end', gap: '16px' }}>
-              <button onClick={closeModal} style={{ background: 'transparent', color: 'var(--text-secondary)', border: '1px solid rgba(255,255,255,0.1)', padding: '10px 24px', borderRadius: '8px', cursor: 'pointer', fontWeight: 500 }}>Cancel</button>
-              <button form="invoice-form" type="submit" style={{ background: 'var(--accent-primary)', color: 'white', border: 'none', padding: '10px 24px', borderRadius: '8px', cursor: 'pointer', fontWeight: 600 }}>Save Invoice</button>
+            <div style={{ padding: '24px 32px', borderTop: '1px solid var(--glass-bg)', display: 'flex', justifyContent: 'flex-end', gap: '16px' }}>
+              <button onClick={closeModal} style={{ background: 'transparent', color: 'var(--text-secondary)', border: '1px solid var(--glass-border)', padding: '10px 24px', borderRadius: '8px', cursor: 'pointer', fontWeight: 500 }}>Cancel</button>
+              <button form="invoice-form" type="submit" style={{ background: 'var(--accent-primary)', color: 'var(--text-primary)', border: 'none', padding: '10px 24px', borderRadius: '8px', cursor: 'pointer', fontWeight: 600 }}>Save Invoice</button>
             </div>
           </div>
         </div>
