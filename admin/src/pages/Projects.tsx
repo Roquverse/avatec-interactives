@@ -129,7 +129,7 @@ export default function Projects() {
   if (loading) return <div style={{ padding: 40, color: 'var(--text-primary)' }}>Loading board...</div>;
 
   return (
-    <div style={{ padding: '32px', height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ padding: '32px', flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, overflow: 'hidden' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
         <h1 style={{ fontSize: '24px', fontWeight: 600, color: 'var(--text-primary)', margin: 0 }}>Project Board</h1>
         <button 
@@ -140,9 +140,9 @@ export default function Projects() {
         </button>
       </div>
 
-      <div style={{ display: 'flex', gap: '24px', flex: 1, overflowX: 'auto', paddingBottom: '16px' }}>
+      <div style={{ display: 'flex', gap: '24px', flex: 1, overflowX: 'auto', paddingBottom: '16px', minHeight: 0 }}>
         {getColumns().map(col => (
-          <div key={col.id} style={{ minWidth: '320px', background: 'var(--glass-very-subtle)', border: '1px solid var(--glass-bg)', borderRadius: '16px', padding: '20px', display: 'flex', flexDirection: 'column' }}>
+          <div key={col.id} style={{ minWidth: '320px', flex: 1, background: 'var(--glass-very-subtle)', border: '1px solid var(--glass-bg)', borderRadius: '16px', padding: '20px', display: 'flex', flexDirection: 'column', minHeight: 0 }}>
             <h3 style={{ margin: '0 0 20px 0', color: 'var(--text-secondary)', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               {col.title}
               <span style={{ background: 'var(--glass-border)', padding: '2px 8px', borderRadius: '12px', fontSize: '12px' }}>
@@ -150,7 +150,7 @@ export default function Projects() {
               </span>
             </h3>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', flex: 1, overflowY: 'auto' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', flex: 1, overflowY: 'auto', paddingRight: '4px' }}>
               {projects.filter(p => p.status === col.id).map(project => (
                 <div 
                   key={project.id} 
