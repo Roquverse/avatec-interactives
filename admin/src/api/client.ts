@@ -21,7 +21,7 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response && error.response.status === 401) {
+    if (error.response && (error.response.status === 401 || error.response.status === 403)) {
       // Don't redirect if the error is coming from the login endpoint itself
       if (error.config && !error.config.url.includes('/auth/login')) {
         localStorage.removeItem('admin_token');

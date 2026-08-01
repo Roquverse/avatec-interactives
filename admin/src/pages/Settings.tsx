@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { User, Bell, Lock, Moon, Monitor } from 'lucide-react';
+import { User, Bell, Lock, Moon, Monitor, LogOut } from 'lucide-react';
 
 export default function Settings() {
   const [activeTab, setActiveTab] = useState('profile');
@@ -11,8 +11,8 @@ export default function Settings() {
   const [emailNotifications, setEmailNotifications] = useState(true);
 
   // Profile State
-  const [fullName, setFullName] = useState('Admin User');
-  const [email, setEmail] = useState('admin@avatec.com');
+  const [fullName, setFullName] = useState(localStorage.getItem('admin_name') || 'Admin User');
+  const [email, setEmail] = useState(localStorage.getItem('admin_email') || 'admin@avatec.com');
 
   // Password State
   const [currentPassword, setCurrentPassword] = useState('');
@@ -32,7 +32,16 @@ export default function Settings() {
 
   const handleProfileSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    alert(`Profile updated successfully!\nName: ${fullName}\nEmail: ${email}`);
+    localStorage.setItem('admin_name', fullName);
+    localStorage.setItem('admin_email', email);
+    window.dispatchEvent(new Event('profileUpdated'));
+    alert(`Profile updated successfully!`);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('admin_token');
+    localStorage.removeItem('admin_user');
+    window.location.href = '/login';
   };
 
   const handlePasswordSubmit = (e: React.FormEvent) => {
@@ -95,6 +104,25 @@ export default function Settings() {
           >
             <Monitor size={18} /> Preferences
           </button>
+
+          <div style={{ marginTop: 'auto', paddingTop: '24px' }}>
+            <button 
+              onClick={handleLogout}
+              style={{ 
+                display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 16px', borderRadius: '12px', cursor: 'pointer', border: '1px solid rgba(239, 68, 68, 0.2)',
+                background: 'rgba(239, 68, 68, 0.05)',
+                color: '#ef4444',
+                fontWeight: 600,
+                textAlign: 'left',
+                width: '100%',
+                transition: 'all 0.2s'
+              }}
+              onMouseOver={(e) => e.currentTarget.style.background = 'rgba(239, 68, 68, 0.1)'}
+              onMouseOut={(e) => e.currentTarget.style.background = 'rgba(239, 68, 68, 0.05)'}
+            >
+              <LogOut size={18} /> Sign Out
+            </button>
+          </div>
         </div>
 
         {/* Settings Content */}
@@ -141,7 +169,14 @@ export default function Settings() {
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '16px' }}>
+                  <button 
+                    type="button" 
+                    onClick={handleLogout}
+                    style={{ background: 'transparent', color: '#ef4444', border: '1px solid rgba(239, 68, 68, 0.3)', padding: '10px 24px', borderRadius: '8px', cursor: 'pointer', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px' }}
+                  >
+                    <LogOut size={16} /> Sign Out
+                  </button>
                   <button type="submit" style={{ background: 'var(--accent-primary)', color: 'var(--text-primary)', border: 'none', padding: '10px 24px', borderRadius: '8px', cursor: 'pointer', fontWeight: 600 }}>
                     Save Changes
                   </button>

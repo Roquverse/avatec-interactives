@@ -21,6 +21,7 @@ type Project = {
   projectType?: string;
   industry?: string;
   platform?: string;
+  client?: { name: string };
 };
 
 export default function ProjectDetail() {
@@ -79,11 +80,15 @@ export default function ProjectDetail() {
         <Link to="/work" style={{ color: '#a3a3a3', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 40, fontSize: 14, fontFamily: 'Inter' }}>
           ← Back to Work
         </Link>
-        {project.companyName && (
+        {project.client ? (
+          <div style={{ marginBottom: 16, color: '#ab0924', fontFamily: 'Outfit', fontWeight: 600, letterSpacing: '2px', textTransform: 'uppercase', fontSize: 14 }}>
+            Client: {project.client.name}
+          </div>
+        ) : project.companyName ? (
           <div style={{ marginBottom: 16, color: '#ab0924', fontFamily: 'Outfit', fontWeight: 600, letterSpacing: '2px', textTransform: 'uppercase', fontSize: 14 }}>
             {project.companyName}
           </div>
-        )}
+        ) : null}
         <h1 className="display-heading" style={{ fontSize: 'clamp(40px, 6vw, 72px)', color: 'white', lineHeight: 1.1, marginBottom: 24, letterSpacing: '-2px' }}>
           {project.name}
         </h1>

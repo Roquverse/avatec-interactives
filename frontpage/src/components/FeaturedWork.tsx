@@ -10,6 +10,7 @@ type Project = {
   category: string;
   tags: string[];
   imageUrl: string;
+  client?: { name: string };
 };
 
 function ProjectCard({ project }: { project: Project }) {
@@ -38,7 +39,11 @@ function ProjectCard({ project }: { project: Project }) {
 
       {/* Details */}
       <div style={{ padding: '32px 32px 24px', display: 'flex', flexDirection: 'column', gap: 8, borderTop: '1px solid #232323' }}>
-        {project.companyName && <div className="section-label" style={{ color: '#ab0924' }}>{project.companyName}</div>}
+        {project.client ? (
+          <div className="section-label" style={{ color: '#ab0924' }}>Client: {project.client.name}</div>
+        ) : project.companyName ? (
+          <div className="section-label" style={{ color: '#ab0924' }}>{project.companyName}</div>
+        ) : null}
         <p style={{ fontSize: 15, color: '#a3a3a3', lineHeight: 1.6, fontFamily: 'Inter', margin: 0 }}>
           {project.description}
         </p>

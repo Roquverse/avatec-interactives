@@ -1,10 +1,25 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Outlet, NavLink } from 'react-router-dom';
 import { LayoutDashboard, FolderKanban, Users, Globe, Settings, Plus, BookOpen, Search, Receipt, CalendarDays } from 'lucide-react';
 
 const DashboardLayout = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchActive, setIsSearchActive] = useState(false);
+  const [profile, setProfile] = useState({
+    name: localStorage.getItem('admin_name') || 'Admin User',
+    email: localStorage.getItem('admin_email') || 'admin@avatec.com'
+  });
+
+  useEffect(() => {
+    const handleUpdate = () => {
+      setProfile({
+        name: localStorage.getItem('admin_name') || 'Admin User',
+        email: localStorage.getItem('admin_email') || 'admin@avatec.com'
+      });
+    };
+    window.addEventListener('profileUpdated', handleUpdate);
+    return () => window.removeEventListener('profileUpdated', handleUpdate);
+  }, []);
 
   return (
     <div className="app-container">
@@ -77,10 +92,10 @@ const DashboardLayout = () => {
             )}
             <div className="user-profile">
               <div className="user-info">
-                <div className="user-name">Admin User</div>
-                <div className="user-handle">@admin</div>
+                <div className="user-name">{profile.name}</div>
+                <div className="user-handle">{profile.email}</div>
               </div>
-              <div className="user-avatar" style={{ backgroundImage: 'url(https://ui-avatars.com/api/?name=Admin+User&background=ab0924&color=121318)', backgroundSize: 'cover' }}></div>
+              <div className="user-avatar" style={{ backgroundImage: `url(https://ui-avatars.com/api/?name=${encodeURIComponent(profile.name)}&background=ab0924&color=121318)`, backgroundSize: 'cover' }}></div>
             </div>
           </div>
         </header>

@@ -4,6 +4,7 @@ import { Plus, X, ExternalLink, Image as ImageIcon, Pencil, Trash2 } from 'lucid
 
 const Portfolio = () => {
   const [projects, setProjects] = useState([]);
+  const [clients, setClients] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -25,16 +26,21 @@ const Portfolio = () => {
     challenges: '',
     outcome: '',
     scopeOfWork: '',
-    gallery: ''
+    gallery: '',
+    clientId: ''
   });
 
   const fetchProjects = async () => {
     try {
       setLoading(true);
-      const res = await api.get('/projects?portfolio=true');
-      setProjects(res.data);
+      const [projectsRes, clientsRes] = await Promise.all([
+        api.get('/projects?portfolio=true'),
+        api.get('/clients')
+      ]);
+      setProjects(projectsRes.data);
+      setClients(clientsRes.data);
     } catch (error) {
-      console.error('Error fetching projects:', error);
+      console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
     }
@@ -74,12 +80,13 @@ const Portfolio = () => {
         await api.put(`/projects/${editingId}`, {
           ...payload,
           imageUrl: finalImageUrl,
+          clientId: formData.clientId || null
         });
       } else {
         await api.post('/projects', {
           ...payload,
           imageUrl: finalImageUrl,
-          clientId: null
+          clientId: formData.clientId || null
         });
       }
       
@@ -87,7 +94,7 @@ const Portfolio = () => {
       setEditingId(null);
       setImageFile(null);
       setFormData({
-        name: '', description: '', status: 'ACTIVE', imageUrl: '', websiteUrl: '', tags: '', projectType: '', industry: '', platform: '', projectInfo: '', challenges: '', outcome: '', scopeOfWork: '', gallery: ''
+        name: '', description: '', status: 'ACTIVE', imageUrl: '', websiteUrl: '', tags: '', projectType: '', industry: '', platform: '', projectInfo: '', challenges: '', outcome: '', scopeOfWork: '', gallery: '', clientId: ''
       });
       await fetchProjects();
     } catch (error) {
@@ -113,7 +120,8 @@ const Portfolio = () => {
       challenges: project.challenges || '',
       outcome: project.outcome || '',
       scopeOfWork: project.scopeOfWork || '',
-      gallery: project.gallery ? project.gallery.join(', ') : ''
+      gallery: project.gallery ? project.gallery.join(', ') : '',
+      clientId: project.clientId || ''
     });
     setEditingId(project.id);
     setImageFile(null);
@@ -155,7 +163,7 @@ const Portfolio = () => {
             setEditingId(null);
             setImageFile(null);
             setFormData({
-              name: '', description: '', status: 'ACTIVE', imageUrl: '', websiteUrl: '', tags: '', projectType: '', industry: '', platform: '', projectInfo: '', challenges: '', outcome: '', scopeOfWork: '', gallery: ''
+              name: '', description: '', status: 'ACTIVE', imageUrl: '', websiteUrl: '', tags: '', projectType: '', industry: '', platform: '', projectInfo: '', challenges: '', outcome: '', scopeOfWork: '', gallery: '', clientId: ''
             });
             setShowModal(true);
           }}
@@ -202,6 +210,12 @@ const Portfolio = () => {
                   {getStatusBadge(project.status)}
                 </div>
                 
+                {project.client && (
+                  <div style={{ color: 'var(--accent-primary)', fontSize: '0.85rem', fontWeight: 500, marginBottom: '0.5rem' }}>
+                    Client: {project.client.name}
+                  </div>
+                )}
+
                 <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: 1.5, marginBottom: '1.5rem', flex: 1 }}>
                   {project.description || 'No description provided.'}
                 </p>
@@ -414,6 +428,20 @@ const Portfolio = () => {
                     <option value="ACTIVE">Active</option>
                     <option value="PLANNED">Planned</option>
                     <option value="COMPLETED">Completed</option>
+                  </select>
+                </div>
+                <div style={{ flex: 1 }}>
+                  <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Client</label>
+                  <select 
+                    name="clientId"
+                    value={formData.clientId}
+                    onChange={handleInputChange}
+                    style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'var(--text-primary)' }}
+                  >
+                    <option value="">No Client (Internal)</option>
+                    {clients.map((client: any) => (
+                      <option key={client.id} value={client.id}>{client.name}</option>
+                    ))}
                   </select>
                 </div>
               </div>
