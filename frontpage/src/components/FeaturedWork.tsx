@@ -1,5 +1,39 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
+
+function ScrollReveal({ children, delay = 0 }: { children: React.ReactNode, delay?: number }) {
+  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            setIsVisible(true);
+          }, delay);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1, rootMargin: '50px' }
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [delay]);
+
+  return (
+    <div
+      ref={ref}
+      style={{
+        opacity: isVisible ? 1 : 0,
+        transform: isVisible ? 'translateY(0)' : 'translateY(40px)',
+        transition: 'opacity 0.7s ease-out, transform 0.7s ease-out',
+      }}
+    >
+      {children}
+    </div>
+  );
+}
 
 type Project = {
   id: string;
@@ -78,7 +112,7 @@ function ProjectCard({ project }: { project: Project }) {
   )
 }
 
-export default function FeaturedWork() {
+export default function FeaturedWork({ limit }: { limit?: number }) {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -102,8 +136,9 @@ export default function FeaturedWork() {
     fetchProjects();
   }, []);
 
-  const leftColumnProjects = projects.filter((_, i) => i % 2 === 0);
-  const rightColumnProjects = projects.filter((_, i) => i % 2 !== 0);
+  const displayedProjects = limit ? projects.slice(0, limit) : projects;
+  const leftColumnProjects = displayedProjects.filter((_, i) => i % 2 === 0);
+  const rightColumnProjects = displayedProjects.filter((_, i) => i % 2 !== 0);
 
   if (loading) {
     return (
@@ -125,13 +160,17 @@ export default function FeaturedWork() {
       <div className="responsive-grid-2" style={{ alignItems: 'start' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 40 }}>
           {leftColumnProjects.map((project, index) => (
-            <ProjectCard key={project.id || `left-${index}`} project={project} />
+            <ScrollReveal key={project.id || `left-${index}`}>
+              <ProjectCard project={project} />
+            </ScrollReveal>
           ))}
         </div>
 
         <div className="featured-work-right-column" style={{ display: 'flex', flexDirection: 'column', gap: 40, marginTop: 180 }}>
           {rightColumnProjects.map((project, index) => (
-            <ProjectCard key={project.id || `right-${index}`} project={project} />
+            <ScrollReveal key={project.id || `right-${index}`} delay={150}>
+              <ProjectCard project={project} />
+            </ScrollReveal>
           ))}
         </div>
       </div>

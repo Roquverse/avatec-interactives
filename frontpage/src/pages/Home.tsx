@@ -12,7 +12,7 @@ export default function Home() {
     <>
       <Hero />
       <TrustBar />
-      <FeaturedWork />
+      <FeaturedWork limit={3} />
       <Services />
       <Process />
       <WhyAvatec />
