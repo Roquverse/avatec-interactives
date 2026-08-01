@@ -154,11 +154,10 @@ const Portfolio = () => {
   };
 
   return (
-    <div style={{ paddingBottom: '2rem' }}>
+    <div style={{ paddingBottom: '2rem', flex: 1, overflowY: 'auto', paddingRight: '0.5rem' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <h2 style={{ fontSize: '1.75rem', fontWeight: 600, fontFamily: 'Outfit, sans-serif' }}>Portfolio Projects</h2>
         <button 
-          className="btn btn-primary" 
           onClick={() => {
             setEditingId(null);
             setImageFile(null);
@@ -167,7 +166,7 @@ const Portfolio = () => {
             });
             setShowModal(true);
           }}
-          style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+          style={{ background: 'var(--accent-primary)', color: 'var(--text-primary)', border: 'none', padding: '10px 20px', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontWeight: 600 }}
         >
           <Plus size={18} /> Add Project
         </button>
