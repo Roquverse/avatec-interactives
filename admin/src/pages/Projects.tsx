@@ -55,7 +55,7 @@ export default function Projects() {
     const name = prompt('Enter new project name:');
     if (!name) return;
     try {
-      await api.post('/projects', { name, status: 'PLANNED' });
+      await api.post('/projects', { name, status: 'IN_DEVELOPMENT' });
       fetchData();
     } catch (error) {
       console.error('Error creating project:', error);
@@ -119,9 +119,10 @@ export default function Projects() {
 
   const getColumns = () => {
     return [
-      { id: 'PLANNED', title: 'Planned' },
-      { id: 'EDIT', title: 'Edit' },
-      { id: 'ACTIVE', title: 'Active' },
+      { id: 'IN_DEVELOPMENT', title: 'In Development' },
+      { id: 'DEPLOYED', title: 'Deployed' },
+      { id: 'IN_PRODUCTION', title: 'In Production' },
+      { id: 'TESTING', title: 'Testing' },
       { id: 'COMPLETED', title: 'Completed' }
     ];
   };
@@ -200,9 +201,10 @@ export default function Projects() {
                   }}
                   style={{ background: 'var(--glass-border)', color: 'var(--text-primary)', border: 'none', padding: '8px 16px', borderRadius: '8px', outline: 'none' }}
                 >
-                  <option value="PLANNED">Planned</option>
-                  <option value="EDIT">Edit</option>
-                  <option value="ACTIVE">Active</option>
+                  <option value="IN_DEVELOPMENT">In Development</option>
+                  <option value="DEPLOYED">Deployed</option>
+                  <option value="IN_PRODUCTION">In Production</option>
+                  <option value="TESTING">Testing</option>
                   <option value="COMPLETED">Completed</option>
                 </select>
                 <button onClick={() => setIsModalOpen(false)} style={{ background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}>Close</button>

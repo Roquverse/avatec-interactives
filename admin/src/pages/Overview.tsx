@@ -194,7 +194,7 @@ const Overview = () => {
                     const left = Math.max(0, Math.min(leftPercent, 100));
                     const width = Math.max(2, Math.min(widthPercent, 100 - left));
 
-                    const colorClass = project.status === 'COMPLETED' ? 'pill-green' : (project.status === 'IN_PROGRESS' ? 'pill-orange' : 'pill-white');
+                    const colorClass = project.status === 'COMPLETED' ? 'pill-green' : (project.status === 'IN_DEVELOPMENT' ? 'pill-white' : 'pill-orange');
                     const textStyle = colorClass === 'pill-white' ? { color: '#000' } : { color: 'var(--bg-primary)' };
 
                     return (
@@ -219,10 +219,10 @@ const Overview = () => {
 
             <div className="legend" style={{ marginTop: 'auto', paddingTop: '1rem' }}>
               <div className="legend-item">
-                <div className="legend-dot pill-white"></div> Planned
+                <div className="legend-dot pill-white"></div> In Development
               </div>
               <div className="legend-item">
-                <div className="legend-dot pill-orange"></div> In Progress
+                <div className="legend-dot pill-orange"></div> In Progress (Testing / Deployed)
               </div>
               <div className="legend-item">
                 <div className="legend-dot pill-green"></div> Completed

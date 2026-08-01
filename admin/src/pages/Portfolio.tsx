@@ -141,13 +141,17 @@ const Portfolio = () => {
   };
 
   const getStatusBadge = (status: string) => {
-    switch(status.toLowerCase()) {
-      case 'active':
-        return <span className="badge badge-success">Active</span>;
-      case 'planned':
-        return <span className="badge badge-warning">Planned</span>;
-      case 'completed':
-        return <span className="badge badge-neutral">Completed</span>;
+    switch(status.toUpperCase()) {
+      case 'IN_DEVELOPMENT':
+        return <span className="badge badge-warning">In Development</span>;
+      case 'DEPLOYED':
+        return <span className="badge badge-info" style={{ backgroundColor: 'rgba(59, 130, 246, 0.2)', color: '#60a5fa' }}>Deployed</span>;
+      case 'IN_PRODUCTION':
+        return <span className="badge badge-success">In Production</span>;
+      case 'TESTING':
+        return <span className="badge badge-neutral">Testing</span>;
+      case 'COMPLETED':
+        return <span className="badge badge-success">Completed</span>;
       default:
         return <span className="badge badge-neutral">{status}</span>;
     }
@@ -424,8 +428,10 @@ const Portfolio = () => {
                     onChange={handleInputChange}
                     style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', color: 'var(--text-primary)' }}
                   >
-                    <option value="ACTIVE">Active</option>
-                    <option value="PLANNED">Planned</option>
+                    <option value="IN_DEVELOPMENT">In Development</option>
+                    <option value="DEPLOYED">Deployed</option>
+                    <option value="IN_PRODUCTION">In Production</option>
+                    <option value="TESTING">Testing</option>
                     <option value="COMPLETED">Completed</option>
                   </select>
                 </div>
