@@ -24,48 +24,40 @@ const metrics = [
 
 export default function TrustBar() {
   return (
-    <section
-      style={{
-        borderTop: '1px solid #232323',
-        borderBottom: '1px solid #232323',
-        background: '#0a0a0a',
-        overflow: 'hidden',
-      }}
-    >
-      {/* Scrolling tech strip */}
-      <div style={{ borderTop: '1px solid #232323', padding: '28px 0', position: 'relative', overflow: 'hidden' }}>
+    <section className="cf-section">
+      <div className="cf-shell" style={{ display: 'flex', alignItems: 'stretch' }}>
         <div
+          className="hide-mobile"
           style={{
-            position: 'absolute', left: 0, top: 0, bottom: 0, width: 120,
-            background: 'linear-gradient(90deg, #0a0a0a, transparent)', zIndex: 1,
+            flexShrink: 0, padding: '0 24px', display: 'flex', alignItems: 'center',
+            borderRight: '1px solid var(--cf-line)',
+            fontFamily: 'var(--cf-mono)', fontSize: 10, letterSpacing: '0.12em',
+            textTransform: 'uppercase', color: 'var(--cf-dim)',
           }}
-        />
-        <div
-          style={{
-            position: 'absolute', right: 0, top: 0, bottom: 0, width: 120,
-            background: 'linear-gradient(270deg, #0a0a0a, transparent)', zIndex: 1,
-          }}
-        />
-        <div className="animate-scroll-logos" style={{ display: 'flex', gap: 64, whiteSpace: 'nowrap', width: 'max-content', alignItems: 'center' }}>
-          {[...technologies, ...technologies].map((tech, i) => (
-            <span
-              key={i}
-              style={{
-                fontFamily: 'Outfit',
-                fontWeight: 800,
-                fontSize: 24,
-                color: '#333',
-                letterSpacing: '0.04em',
-                textTransform: 'uppercase',
-                transition: 'color 0.3s',
-                cursor: 'default',
-              }}
-              onMouseEnter={e => (e.currentTarget.style.color = '#ab0924')}
-              onMouseLeave={e => (e.currentTarget.style.color = '#333')}
-            >
-              {tech}
-            </span>
-          ))}
+        >
+          <span className="cf-dot" style={{ display: 'inline-block', width: 6, height: 6, background: 'var(--cf-accent)', marginRight: 8 }} />
+          Our stack
+        </div>
+
+        <div className="cf-marquee" style={{ flex: 1, padding: '22px 0' }}>
+          <div className="animate-scroll-logos" style={{ display: 'flex', gap: 48, whiteSpace: 'nowrap', width: 'max-content', alignItems: 'center' }}>
+            {[...technologies, ...technologies].map((tech, i) => (
+              <span
+                key={i}
+                style={{
+                  fontFamily: 'var(--cf-mono)', fontWeight: 500, fontSize: 13,
+                  color: 'var(--cf-dim)', letterSpacing: '0.1em', textTransform: 'uppercase',
+                  transition: 'color 0.25s', cursor: 'default',
+                  display: 'inline-flex', alignItems: 'center', gap: 48,
+                }}
+                onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
+                onMouseLeave={e => (e.currentTarget.style.color = 'var(--cf-dim)')}
+              >
+                {tech}
+                <span style={{ color: 'var(--cf-line-strong)' }}>+</span>
+              </span>
+            ))}
+          </div>
         </div>
       </div>
     </section>

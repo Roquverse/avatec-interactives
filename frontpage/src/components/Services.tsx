@@ -19,77 +19,60 @@ const serviceDescs: Record<string, string> = {
   'UI/UX Design':        'Design systems, user research, and pixel-perfect interfaces that convert visitors into loyal customers.',
 }
 
-const layout = [
-  { cols: 2, rows: 1 },
-  { cols: 1, rows: 1 },
-  { cols: 1, rows: 2 },
-  { cols: 1, rows: 1 },
-  { cols: 1, rows: 1 },
-  { cols: 2, rows: 1 },
-]
-
-export default function Services() {
+export default function Services({ hideHeader = false }: { hideHeader?: boolean }) {
   const services = Object.keys(serviceIcons)
 
   return (
-    <section className="mobile-padded" style={{ background: 'linear-gradient(160deg, #08071a 0%, #0d0b22 40%, #0b0918 75%, #06050f 100%)', borderTop: '1px solid #232323', borderBottom: '1px solid #232323' }}>
-      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '120px 40px' }}>
-        <div className="stack-mobile" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 64, flexWrap: 'wrap', gap: 24 }}>
-          <div>
-            <div className="section-label" style={{ marginBottom: 16 }}>Services</div>
-            <h2 className="display-heading" style={{ fontSize: 'clamp(40px, 5vw, 64px)', color: 'white' }}>
-              What we build.
-            </h2>
-          </div>
-          <p style={{ fontSize: 16, color: '#a3a3a3', maxWidth: 360, lineHeight: 1.7, fontFamily: 'Inter' }}>
-            From early-stage startups to scaling enterprises — we cover the full product stack.
-          </p>
-        </div>
+    <section className="cf-section">
+      <div className="cf-shell">
+        {!hideHeader && (
+          <>
+            <div className="cf-bar">
+              <span><span className="cf-dot" />02 — Services</span>
+              <span>{String(services.length).padStart(2, '0')} Disciplines</span>
+            </div>
 
-        <div className="responsive-grid-3">
-          {services.map((svc, i) => {
-            const l = layout[i]
-            return (
-              <Link
-                key={svc}
-                to={`/services/${svc.toLowerCase().replace(/ & /g, '-').replace(/[\s\/]+/g, '-')}`}
-                className="service-card"
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  textDecoration: 'none'
-                }}
-              >
-                <div>
-                  <div
-                    style={{
-                      width: 44, height: 44,
-                      background: 'rgba(171, 9, 36,0.12)',
-                      border: '1px solid rgba(171, 9, 36,0.2)',
-                      borderRadius: 12,
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      marginBottom: 20,
-                    }}
-                  >
-                    <Icon d={serviceIcons[svc]} size={20} stroke="#e184a6" />
+            <div className="cf-head">
+              <h2 className="cf-h2">What we <em>build.</em></h2>
+              <p className="cf-lede">
+                From early-stage startups to scaling enterprises — we cover the full product stack.
+              </p>
+            </div>
+          </>
+        )}
+
+        <div className="cf-grid c3" style={hideHeader ? { borderTop: 'none' } : undefined}>
+          {services.map((svc, i) => (
+            <Link
+              key={svc}
+              to={`/services/${svc.toLowerCase().replace(/ & /g, '-').replace(/[\s\/]+/g, '-')}`}
+              className="cf-cell ticks hoverable cf-cell-pad"
+              style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', textDecoration: 'none', minHeight: 280 }}
+            >
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 28 }}>
+                  <div style={{
+                    width: 40, height: 40, border: '1px solid var(--cf-line-strong)', borderRadius: 2,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--cf-accent)',
+                  }}>
+                    <Icon d={serviceIcons[svc]} size={18} stroke="currentColor" />
                   </div>
-                  <h3 style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: 20, color: 'white', marginBottom: 10, letterSpacing: '-0.02em' }}>
-                    {svc}
-                  </h3>
-                  <p style={{ fontSize: 14, color: '#a3a3a3', lineHeight: 1.7, fontFamily: 'Inter' }}>
-                    {serviceDescs[svc]}
-                  </p>
+                  <span style={{ fontFamily: 'var(--cf-mono)', fontSize: 10, letterSpacing: '0.12em', color: 'var(--cf-dim)' }}>
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
                 </div>
-                <span 
-                  className="btn-ghost" 
-                  style={{ fontSize: 13, padding: '8px 16px', marginTop: 20, width: 'fit-content' }}
-                >
-                  Learn more →
-                </span>
-              </Link>
-            )
-          })}
+                <h3 style={{ fontFamily: 'var(--cf-sans)', fontWeight: 600, fontSize: 22, color: '#fff', marginBottom: 10, letterSpacing: '-0.03em' }}>
+                  {svc}
+                </h3>
+                <p style={{ fontSize: 14, color: 'var(--cf-muted)', lineHeight: 1.7, fontFamily: 'Inter', margin: 0 }}>
+                  {serviceDescs[svc]}
+                </p>
+              </div>
+              <span style={{ fontFamily: 'var(--cf-mono)', fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--cf-text)', marginTop: 24 }}>
+                Learn more →
+              </span>
+            </Link>
+          ))}
         </div>
       </div>
     </section>

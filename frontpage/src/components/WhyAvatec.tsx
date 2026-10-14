@@ -8,42 +8,41 @@ const points = [
 
 export default function WhyAvatec() {
   return (
-    <section className="mobile-padded" style={{ background: '#080808', borderTop: '1px solid #232323' }}>
-      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '120px 40px' }}>
-        <div className="responsive-grid-2" style={{ alignItems: 'start' }}>
+    <section className="cf-section">
+      <div className="cf-shell">
+        <div className="cf-bar">
+          <span><span className="cf-dot" />04 — Why Avatec</span>
+          <span>{String(points.length).padStart(2, '0')} Reasons</span>
+        </div>
+
+        <div className="cf-grid c2" style={{ borderTop: 'none' }}>
           {/* Left */}
-          <div>
-            <div className="section-label" style={{ marginBottom: 16 }}>Why Avatec</div>
-            <h2 className="display-heading" style={{ fontSize: 'clamp(40px, 5vw, 56px)', color: 'white', marginBottom: 24 }}>
-              Why founders choose us.
+          <div className="cf-cell cf-cell-pad" style={{ padding: '64px clamp(24px, 4vw, 64px)', background: 'transparent' }}>
+            <h2 className="cf-h2" style={{ marginBottom: 24, fontSize: 'clamp(36px, 4.2vw, 54px)' }}>
+              Why founders <em>choose us.</em>
             </h2>
-            <p style={{ fontSize: 16, color: '#a3a3a3', lineHeight: 1.8, fontFamily: 'Inter', marginBottom: 40 }}>
+            <p className="cf-lede" style={{ marginBottom: 36 }}>
               We've shipped products for founders in the US, UK, and Nigeria. Here's what keeps them coming back.
             </p>
-            <button className="btn-primary">Start a project →</button>
+            <button className="cf-btn">Start a project →</button>
           </div>
 
           {/* Right */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
             {points.map((p, i) => (
               <div
                 key={i}
-                className="card-hover"
-                style={{
-                  padding: '28px 0',
-                  borderBottom: i < points.length - 1 ? '1px solid #232323' : 'none',
-                  display: 'flex', gap: 24, alignItems: 'flex-start',
-                  cursor: 'default', borderRadius: 0,
-                }}
+                className="cf-cell hoverable"
+                style={{ display: 'flex', gap: 24, alignItems: 'flex-start', padding: '28px 32px', flex: 1, cursor: 'default', boxShadow: i === points.length - 1 ? 'inset -1px 0 0 var(--cf-line)' : undefined }}
               >
-                <span className="display-heading" style={{ fontSize: 14, color: '#333', minWidth: 28, paddingTop: 2 }}>
+                <span style={{ fontFamily: 'var(--cf-mono)', fontSize: 11, color: 'var(--cf-accent)', minWidth: 28, paddingTop: 4, letterSpacing: '0.08em' }}>
                   {p.num}
                 </span>
                 <div>
-                  <h3 style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: 18, color: 'white', marginBottom: 6 }}>
+                  <h3 style={{ fontFamily: 'var(--cf-sans)', fontWeight: 600, fontSize: 18, letterSpacing: '-0.02em', color: '#fff', marginBottom: 6 }}>
                     {p.title}
                   </h3>
-                  <p style={{ fontSize: 14, color: '#a3a3a3', lineHeight: 1.7, fontFamily: 'Inter' }}>{p.desc}</p>
+                  <p style={{ fontSize: 14, color: 'var(--cf-muted)', lineHeight: 1.7, fontFamily: 'Inter', margin: 0 }}>{p.desc}</p>
                 </div>
               </div>
             ))}

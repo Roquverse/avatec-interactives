@@ -1,32 +1,56 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from '../api/client';
-import { Plus, Edit, Trash2, CheckCircle, Clock, FileText, X } from 'lucide-react';
+import { 
+  Plus, 
+  Trash2, 
+  Edit, 
+  CheckCircle, 
+  Clock, 
+  FileText, 
+  X
+} from 'lucide-react';
+
+interface LineItem {
+  description: string;
+  amount: number;
+}
+
+interface Invoice {
+  id: string;
+  clientId: string;
+  client?: { name: string; email: string };
+  amount: number;
+  status: string;
+  dueDate: string | null;
+  lineItems: LineItem[];
+  createdAt: string;
+}
 
 export default function Invoices() {
-  const [invoices, setInvoices] = useState<any[]>([]);
+  const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [clients, setClients] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-
-  // Modal states
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingInvoice, setEditingInvoice] = useState<any>(null);
-  
-  // Form states
+  const [editingInvoice, setEditingInvoice] = useState<Invoice | null>(null);
+
+  // Form State
   const [clientId, setClientId] = useState('');
   const [amount, setAmount] = useState('');
   const [status, setStatus] = useState('DRAFT');
   const [dueDate, setDueDate] = useState('');
-  const [lineItems, setLineItems] = useState<{ description: string; amount: number }[]>([]);
+  const [lineItems, setLineItems] = useState<LineItem[]>([
+    { description: 'Interactive Web Platform Milestone 1', amount: 0 }
+  ]);
 
   const fetchData = async () => {
     try {
       setLoading(true);
-      const [invRes, cliRes] = await Promise.all([
+      const [invRes, clientRes] = await Promise.all([
         api.get('/invoices'),
         api.get('/clients')
       ]);
       setInvoices(invRes.data);
-      setClients(cliRes.data);
+      setClients(clientRes.data);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -48,33 +72,29 @@ export default function Invoices() {
     setIsModalOpen(true);
   };
 
-  const openEditModal = (invoice: any) => {
-    setEditingInvoice(invoice);
-    setClientId(invoice.clientId);
-    setAmount(invoice.amount.toString());
-    setStatus(invoice.status);
-    setDueDate(invoice.dueDate ? new Date(invoice.dueDate).toISOString().split('T')[0] : '');
-    setLineItems(invoice.lineItems || [{ description: '', amount: 0 }]);
+  const openEditModal = (inv: Invoice) => {
+    setEditingInvoice(inv);
+    setClientId(inv.clientId);
+    setAmount(inv.amount.toString());
+    setStatus(inv.status);
+    setDueDate(inv.dueDate ? inv.dueDate.split('T')[0] : '');
+    setLineItems(inv.lineItems && inv.lineItems.length > 0 ? inv.lineItems : [{ description: '', amount: 0 }]);
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
+    setEditingInvoice(null);
   };
 
-  const calculateTotal = (items: { amount: number }[]) => {
-    return items.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
-  };
+  const handleLineItemChange = (index: number, field: 'description' | 'amount', value: any) => {
+    const updated = [...lineItems];
+    updated[index] = { ...updated[index], [field]: value };
+    setLineItems(updated);
 
-  const handleLineItemChange = (index: number, field: string, value: any) => {
-    const newItems = [...lineItems];
-    newItems[index] = { ...newItems[index], [field]: value };
-    setLineItems(newItems);
-    
-    // Auto-update total amount when line items change
-    if (field === 'amount') {
-      setAmount(calculateTotal(newItems).toString());
-    }
+    // Auto calculate amount sum
+    const total = updated.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
+    setAmount(total.toString());
   };
 
   const addLineItem = () => {
@@ -82,15 +102,14 @@ export default function Invoices() {
   };
 
   const removeLineItem = (index: number) => {
-    const newItems = lineItems.filter((_, i) => i !== index);
-    setLineItems(newItems);
-    setAmount(calculateTotal(newItems).toString());
+    const updated = lineItems.filter((_, i) => i !== index);
+    setLineItems(updated);
+    const total = updated.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
+    setAmount(total.toString());
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!clientId) return alert('Please select a client');
-
     const payload = {
       clientId,
       amount: Number(amount),
@@ -113,7 +132,7 @@ export default function Invoices() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!window.confirm('Are you sure you want to delete this invoice?')) return;
+    if (!window.confirm('Delete this invoice permanently?')) return;
     try {
       await api.delete(`/invoices/${id}`);
       fetchData();
@@ -131,80 +150,171 @@ export default function Invoices() {
     }
   };
 
-  const getStatusBadge = (status: string) => {
-    switch (status) {
+  const getStatusBadge = (statusVal: string) => {
+    switch (statusVal) {
       case 'PAID':
-        return <span className="status-badge paid"><CheckCircle size={12} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> PAID</span>;
+        return (
+          <span className="status-badge paid">
+            <CheckCircle size={10} /> PAID
+          </span>
+        );
       case 'SENT':
       case 'PENDING':
-        return <span className="status-badge pending"><Clock size={12} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> PENDING</span>;
+        return (
+          <span className="status-badge pending">
+            <Clock size={10} /> PENDING
+          </span>
+        );
       default:
-        return <span className="status-badge draft"><FileText size={12} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 4 }} /> DRAFT</span>;
+        return (
+          <span className="status-badge draft">
+            <FileText size={10} /> DRAFT
+          </span>
+        );
     }
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-      <div className="page-header">
-        <h1 className="page-title">INVOICES</h1>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
+      {/* Header with Hairline Breadcrumb */}
+      <div className="page-header" style={{ marginBottom: '1.25rem' }}>
+        <div>
+          <div style={{
+            fontFamily: "'JetBrains Mono', monospace",
+            fontSize: '11px',
+            letterSpacing: '0.08em',
+            color: '#38bdf8',
+            marginBottom: '4px'
+          }}>
+            [ 06 // FINANCIAL LEDGER ]
+          </div>
+          <h1 className="page-title" style={{ margin: 0, fontSize: '1.5rem', fontWeight: 700 }}>
+            INVOICE MANAGEMENT
+          </h1>
+        </div>
+
         <button 
           onClick={openNewModal}
-          style={{ background: 'var(--accent-primary)', color: 'var(--text-primary)', border: 'none', padding: '10px 20px', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontWeight: 600 }}
+          style={{ 
+            background: '#f5f5f7', 
+            color: '#070709', 
+            border: '1px solid rgba(255, 255, 255, 0.4)', 
+            padding: '8px 16px', 
+            borderRadius: '4px', 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: '8px', 
+            cursor: 'pointer', 
+            fontWeight: 600,
+            fontFamily: "'JetBrains Mono', monospace",
+            fontSize: '11px',
+            letterSpacing: '0.06em',
+            textTransform: 'uppercase',
+            boxShadow: '0 0 12px rgba(255, 255, 255, 0.1)'
+          }}
         >
-          <Plus size={18} /> New Invoice
+          <Plus size={14} /> NEW INVOICE
         </button>
       </div>
 
-      <div style={{ background: 'var(--bg-secondary)', borderRadius: 'var(--radius-lg)', padding: '1px', overflow: 'hidden', flex: 1, display: 'flex', flexDirection: 'column' }}>
+      {/* Invoices Table Card */}
+      <div className="card" style={{ padding: 0, overflow: 'hidden', flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+        <div style={{ 
+          padding: '12px 18px', 
+          borderBottom: '1px solid rgba(255, 255, 255, 0.08)', 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center',
+          backgroundColor: 'rgba(255, 255, 255, 0.015)' 
+        }}>
+          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '11px', color: '#9a9ba4', textTransform: 'uppercase' }}>
+            // BILLED TRANSACTIONS ({invoices.length})
+          </span>
+          <span className="cf-tag" style={{ fontSize: '10px' }}>
+            <span className="cf-dot-live" />
+            LIVE LEDGER
+          </span>
+        </div>
+
         <div style={{ overflowY: 'auto', flex: 1 }}>
           <table className="invoice-table" style={{ width: '100%' }}>
             <thead>
               <tr>
-                <th>Invoice ID</th>
-                <th>Client</th>
-                <th>Amount</th>
-                <th>Due Date</th>
-                <th>Status</th>
-                <th style={{ textAlign: 'right' }}>Actions</th>
+                <th>INVOICE REF</th>
+                <th>CLIENT</th>
+                <th>AMOUNT (USD)</th>
+                <th>PAYMENT DUE</th>
+                <th>STATUS</th>
+                <th style={{ textAlign: 'right' }}>ACTIONS</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan={6} style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}>Loading invoices...</td>
+                  <td colSpan={6} style={{ textAlign: 'center', padding: '3rem', color: '#5e606b', fontFamily: "'JetBrains Mono', monospace" }}>
+                    [ QUERYING FINANCIAL LEDGER... ]
+                  </td>
                 </tr>
               ) : invoices.length === 0 ? (
                 <tr>
-                  <td colSpan={6} style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-muted)' }}>No invoices found.</td>
+                  <td colSpan={6} style={{ textAlign: 'center', padding: '3rem', color: '#5e606b', fontFamily: "'JetBrains Mono', monospace" }}>
+                    // NO INVOICES RECORDED
+                  </td>
                 </tr>
               ) : (
                 invoices.map((invoice) => (
                   <tr key={invoice.id}>
-                    <td style={{ color: 'var(--text-muted)', fontFamily: 'monospace' }}>#{invoice.id.substring(0, 8).toUpperCase()}</td>
-                    <td style={{ fontWeight: 500, color: 'var(--text-primary)' }}>{invoice.client?.name || 'Unknown Client'}</td>
-                    <td style={{ fontWeight: 600 }}>${invoice.amount.toFixed(2)}</td>
-                    <td style={{ color: 'var(--text-secondary)' }}>
-                      {invoice.dueDate ? new Date(invoice.dueDate).toLocaleDateString() : '-'}
+                    <td style={{ color: '#38bdf8', fontFamily: "'JetBrains Mono', monospace", fontSize: '11px', fontWeight: 600 }}>
+                      #INV-{invoice.id.substring(0, 8).toUpperCase()}
+                    </td>
+                    <td style={{ fontWeight: 600, color: '#f5f5f7' }}>
+                      {invoice.client?.name || 'Private Client'}
+                    </td>
+                    <td style={{ fontWeight: 600, fontFamily: "'JetBrains Mono', monospace" }}>
+                      ${invoice.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </td>
+                    <td style={{ color: '#9a9ba4', fontFamily: "'JetBrains Mono', monospace", fontSize: '11px' }}>
+                      {invoice.dueDate ? new Date(invoice.dueDate).toISOString().split('T')[0] : '—'}
                     </td>
                     <td>
-                      <select 
-                        value={invoice.status} 
-                        onChange={(e) => updateStatus(invoice.id, e.target.value)}
-                        style={{ background: 'transparent', border: 'none', appearance: 'none', cursor: 'pointer', color: 'inherit', fontFamily: 'inherit', outline: 'none' }}
-                      >
-                        <option value="DRAFT" style={{ color: 'black' }}>Draft</option>
-                        <option value="PENDING" style={{ color: 'black' }}>Pending</option>
-                        <option value="PAID" style={{ color: 'black' }}>Paid</option>
-                      </select>
-                      {getStatusBadge(invoice.status)}
+                      <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+                        <select 
+                          value={invoice.status} 
+                          onChange={(e) => updateStatus(invoice.id, e.target.value)}
+                          style={{ 
+                            background: '#070709', 
+                            border: '1px solid rgba(255, 255, 255, 0.1)', 
+                            borderRadius: '3px',
+                            cursor: 'pointer', 
+                            color: '#9a9ba4', 
+                            fontFamily: "'JetBrains Mono', monospace", 
+                            fontSize: '10px',
+                            padding: '2px 4px',
+                            outline: 'none' 
+                          }}
+                        >
+                          <option value="DRAFT">DRAFT</option>
+                          <option value="PENDING">PENDING</option>
+                          <option value="PAID">PAID</option>
+                        </select>
+                        {getStatusBadge(invoice.status)}
+                      </div>
                     </td>
                     <td style={{ textAlign: 'right' }}>
-                      <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
-                        <button onClick={() => openEditModal(invoice)} style={{ background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }} title="Edit">
-                          <Edit size={16} />
+                      <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
+                        <button 
+                          onClick={() => openEditModal(invoice)} 
+                          style={{ background: 'none', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '4px', padding: '4px', color: '#9a9ba4', cursor: 'pointer' }} 
+                          title="Edit Invoice"
+                        >
+                          <Edit size={13} />
                         </button>
-                        <button onClick={() => handleDelete(invoice.id)} style={{ background: 'transparent', border: 'none', color: '#ef4444', cursor: 'pointer' }} title="Delete">
-                          <Trash2 size={16} />
+                        <button 
+                          onClick={() => handleDelete(invoice.id)} 
+                          style={{ background: 'none', border: '1px solid rgba(239, 68, 68, 0.2)', borderRadius: '4px', padding: '4px', color: '#f87171', cursor: 'pointer' }} 
+                          title="Delete Invoice"
+                        >
+                          <Trash2 size={13} />
                         </button>
                       </div>
                     </td>
@@ -216,110 +326,178 @@ export default function Invoices() {
         </div>
       </div>
 
+      {/* Invoice Modal */}
       {isModalOpen && (
-        <div style={{ position: 'fixed', inset: 0, background: 'var(--overlay-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 40 }}>
-          <div style={{ background: 'var(--bg-secondary)', width: '100%', maxWidth: '800px', maxHeight: '90vh', borderRadius: '24px', border: '1px solid var(--glass-border)', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-            
-            <div style={{ padding: '24px 32px', borderBottom: '1px solid var(--glass-bg)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h2 style={{ margin: 0, color: 'var(--text-primary)', fontSize: '20px' }}>{editingInvoice ? 'Edit Invoice' : 'New Invoice'}</h2>
-              <button onClick={closeModal} style={{ background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}>Close</button>
+        <div style={{ 
+          position: 'fixed', 
+          inset: 0, 
+          backgroundColor: 'rgba(0, 0, 0, 0.8)', 
+          backdropFilter: 'blur(8px)',
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center', 
+          zIndex: 1000, 
+          padding: 24 
+        }}>
+          <div style={{ 
+            backgroundColor: '#0c0d12', 
+            width: '100%', 
+            maxWidth: '740px', 
+            maxHeight: '90vh', 
+            borderRadius: '6px', 
+            border: '1px solid rgba(255, 255, 255, 0.16)', 
+            display: 'flex', 
+            flexDirection: 'column', 
+            overflow: 'hidden',
+            boxShadow: '0 24px 48px rgba(0, 0, 0, 0.8)',
+            position: 'relative'
+          }}>
+            {/* Modal Crosshairs */}
+            <span style={{ position: 'absolute', top: '-7px', left: '-5px', fontFamily: "'JetBrains Mono', monospace", fontSize: '11px', color: '#5e606b' }}>+</span>
+            <span style={{ position: 'absolute', top: '-7px', right: '-5px', fontFamily: "'JetBrains Mono', monospace", fontSize: '11px', color: '#5e606b' }}>+</span>
+
+            <div style={{ 
+              padding: '18px 24px', 
+              borderBottom: '1px solid rgba(255, 255, 255, 0.08)', 
+              display: 'flex', 
+              justifyContent: 'space-between', 
+              alignItems: 'center',
+              backgroundColor: 'rgba(255, 255, 255, 0.015)'
+            }}>
+              <div>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '10px', color: '#38bdf8', letterSpacing: '0.08em', marginBottom: '2px' }}>
+                  // BILLING TRANSACTION
+                </div>
+                <h2 style={{ margin: 0, color: '#f5f5f7', fontSize: '1.25rem', fontWeight: 700 }}>
+                  {editingInvoice ? 'EDIT INVOICE RECORD' : 'CREATE NEW INVOICE'}
+                </h2>
+              </div>
+
+              <button 
+                onClick={closeModal} 
+                style={{ background: 'none', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '4px', padding: '6px', color: '#9a9ba4', cursor: 'pointer' }}
+              >
+                <X size={16} />
+              </button>
             </div>
 
-            <div style={{ padding: '32px', overflowY: 'auto', flex: 1 }}>
-              <form id="invoice-form" onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            <div style={{ padding: '24px', overflowY: 'auto', flex: 1 }}>
+              <form id="invoice-form" onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
                 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    <label style={{ fontSize: '13px', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '1px' }}>Client *</label>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                  <div>
+                    <label style={{ display: 'block', marginBottom: '0.4rem', fontSize: '10px', fontFamily: "'JetBrains Mono', monospace", color: '#9a9ba4' }}>
+                      CLIENT RECIPIENT *
+                    </label>
                     <select 
                       required
                       value={clientId} 
                       onChange={e => setClientId(e.target.value)} 
-                      style={{ background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', padding: '12px', borderRadius: '8px', color: 'var(--text-primary)', outline: 'none' }}
+                      style={{ width: '100%', padding: '0.65rem 0.8rem', borderRadius: '4px', backgroundColor: '#070709', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#f5f5f7', fontSize: '13px' }}
                     >
-                      <option value="" disabled style={{ color: 'black' }}>Select a client</option>
+                      <option value="" disabled>Select client...</option>
                       {clients.map(client => (
-                        <option key={client.id} value={client.id} style={{ color: 'black' }}>{client.name}</option>
+                        <option key={client.id} value={client.id}>{client.name}</option>
                       ))}
                     </select>
                   </div>
 
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    <label style={{ fontSize: '13px', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '1px' }}>Status</label>
+                  <div>
+                    <label style={{ display: 'block', marginBottom: '0.4rem', fontSize: '10px', fontFamily: "'JetBrains Mono', monospace", color: '#9a9ba4' }}>
+                      PAYMENT STATUS
+                    </label>
                     <select 
                       value={status} 
                       onChange={e => setStatus(e.target.value)} 
-                      style={{ background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', padding: '12px', borderRadius: '8px', color: 'var(--text-primary)', outline: 'none' }}
+                      style={{ width: '100%', padding: '0.65rem 0.8rem', borderRadius: '4px', backgroundColor: '#070709', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#f5f5f7', fontSize: '13px' }}
                     >
-                      <option value="DRAFT" style={{ color: 'black' }}>Draft</option>
-                      <option value="PENDING" style={{ color: 'black' }}>Pending</option>
-                      <option value="PAID" style={{ color: 'black' }}>Paid</option>
+                      <option value="DRAFT">DRAFT</option>
+                      <option value="PENDING">PENDING</option>
+                      <option value="PAID">PAID</option>
                     </select>
                   </div>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    <label style={{ fontSize: '13px', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '1px' }}>Due Date</label>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                  <div>
+                    <label style={{ display: 'block', marginBottom: '0.4rem', fontSize: '10px', fontFamily: "'JetBrains Mono', monospace", color: '#9a9ba4' }}>
+                      PAYMENT DUE DATE
+                    </label>
                     <input 
                       type="date" 
                       value={dueDate} 
                       onChange={e => setDueDate(e.target.value)} 
-                      style={{ background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', padding: '12px', borderRadius: '8px', color: 'var(--text-primary)', outline: 'none', colorScheme: 'dark' }}
+                      style={{ width: '100%', padding: '0.65rem 0.8rem', borderRadius: '4px', backgroundColor: '#070709', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#f5f5f7', fontSize: '13px', colorScheme: 'dark' }}
                     />
                   </div>
 
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    <label style={{ fontSize: '13px', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '1px' }}>Total Amount *</label>
-                    <div style={{ position: 'relative' }}>
-                      <span style={{ position: 'absolute', left: '16px', top: '12px', color: 'var(--text-muted)' }}>$</span>
-                      <input 
-                        required
-                        type="number" 
-                        step="0.01"
-                        value={amount} 
-                        onChange={e => setAmount(e.target.value)} 
-                        style={{ background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', padding: '12px 12px 12px 32px', borderRadius: '8px', color: 'var(--text-primary)', outline: 'none', width: '100%' }}
-                      />
-                    </div>
+                  <div>
+                    <label style={{ display: 'block', marginBottom: '0.4rem', fontSize: '10px', fontFamily: "'JetBrains Mono', monospace", color: '#9a9ba4' }}>
+                      TOTAL AMOUNT (USD) *
+                    </label>
+                    <input 
+                      required
+                      type="number" 
+                      step="0.01"
+                      value={amount} 
+                      onChange={e => setAmount(e.target.value)} 
+                      style={{ width: '100%', padding: '0.65rem 0.8rem', borderRadius: '4px', backgroundColor: '#070709', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#f5f5f7', fontSize: '13px', fontFamily: "'JetBrains Mono', monospace" }}
+                    />
                   </div>
                 </div>
 
                 {/* Line Items Section */}
-                <div style={{ marginTop: '10px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                    <h3 style={{ margin: 0, fontSize: '16px', color: 'var(--text-primary)' }}>Line Items</h3>
-                    <button type="button" onClick={addLineItem} style={{ background: 'transparent', color: 'var(--accent-primary)', border: 'none', display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer', fontWeight: 500 }}>
-                      <Plus size={16} /> Add Item
+                <div style={{ marginTop: '6px', borderTop: '1px solid rgba(255, 255, 255, 0.08)', paddingTop: '16px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                    <span style={{ fontSize: '11px', fontFamily: "'JetBrains Mono', monospace", color: '#f5f5f7', textTransform: 'uppercase' }}>
+                      // ITEMIZED DELIVERABLES
+                    </span>
+                    <button 
+                      type="button" 
+                      onClick={addLineItem} 
+                      style={{ 
+                        background: 'none', 
+                        color: '#38bdf8', 
+                        border: '1px solid rgba(56, 189, 248, 0.25)', 
+                        borderRadius: '3px',
+                        padding: '3px 8px',
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        gap: '4px', 
+                        cursor: 'pointer', 
+                        fontFamily: "'JetBrains Mono', monospace",
+                        fontSize: '10px'
+                      }}
+                    >
+                      <Plus size={12} /> ADD ROW
                     </button>
                   </div>
                   
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     {lineItems.map((item, index) => (
-                      <div key={index} style={{ display: 'flex', gap: '16px', alignItems: 'center', background: 'var(--glass-very-subtle)', padding: '16px', borderRadius: '12px', border: '1px solid var(--glass-bg)' }}>
-                        <div style={{ flex: 2, display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                          <label style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Description</label>
-                          <input 
-                            type="text"
-                            value={item.description}
-                            onChange={e => handleLineItemChange(index, 'description', e.target.value)}
-                            placeholder="Service or item description"
-                            style={{ background: 'transparent', border: '1px solid var(--glass-border)', padding: '8px 12px', borderRadius: '6px', color: 'var(--text-primary)', outline: 'none' }}
-                          />
-                        </div>
-                        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                          <label style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Amount ($)</label>
-                          <input 
-                            type="number"
-                            step="0.01"
-                            value={item.amount || ''}
-                            onChange={e => handleLineItemChange(index, 'amount', parseFloat(e.target.value))}
-                            placeholder="0.00"
-                            style={{ background: 'transparent', border: '1px solid var(--glass-border)', padding: '8px 12px', borderRadius: '6px', color: 'var(--text-primary)', outline: 'none' }}
-                          />
-                        </div>
-                        <button type="button" onClick={() => removeLineItem(index)} style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', marginTop: '18px' }} title="Remove item">
-                          <X size={20} />
+                      <div key={index} style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                        <input 
+                          type="text"
+                          value={item.description}
+                          onChange={e => handleLineItemChange(index, 'description', e.target.value)}
+                          placeholder="Milestone or service description"
+                          style={{ flex: 2, backgroundColor: '#070709', border: '1px solid rgba(255, 255, 255, 0.1)', padding: '8px 12px', borderRadius: '4px', color: '#f5f5f7', fontSize: '13px' }}
+                        />
+                        <input 
+                          type="number"
+                          step="0.01"
+                          value={item.amount || ''}
+                          onChange={e => handleLineItemChange(index, 'amount', parseFloat(e.target.value))}
+                          placeholder="0.00"
+                          style={{ flex: 1, backgroundColor: '#070709', border: '1px solid rgba(255, 255, 255, 0.1)', padding: '8px 12px', borderRadius: '4px', color: '#f5f5f7', fontSize: '13px', fontFamily: "'JetBrains Mono', monospace" }}
+                        />
+                        <button 
+                          type="button" 
+                          onClick={() => removeLineItem(index)} 
+                          style={{ background: 'none', border: 'none', color: '#5e606b', cursor: 'pointer', padding: '4px' }} 
+                          title="Remove item"
+                        >
+                          <X size={16} />
                         </button>
                       </div>
                     ))}
@@ -329,9 +507,33 @@ export default function Invoices() {
               </form>
             </div>
 
-            <div style={{ padding: '24px 32px', borderTop: '1px solid var(--glass-bg)', display: 'flex', justifyContent: 'flex-end', gap: '16px' }}>
-              <button onClick={closeModal} style={{ background: 'transparent', color: 'var(--text-secondary)', border: '1px solid var(--glass-border)', padding: '10px 24px', borderRadius: '8px', cursor: 'pointer', fontWeight: 500 }}>Cancel</button>
-              <button form="invoice-form" type="submit" style={{ background: 'var(--accent-primary)', color: 'var(--text-primary)', border: 'none', padding: '10px 24px', borderRadius: '8px', cursor: 'pointer', fontWeight: 600 }}>Save Invoice</button>
+            <div style={{ padding: '16px 24px', borderTop: '1px solid rgba(255, 255, 255, 0.08)', display: 'flex', justifyContent: 'flex-end', gap: '10px', backgroundColor: 'rgba(255, 255, 255, 0.015)' }}>
+              <button 
+                onClick={closeModal} 
+                style={{ padding: '8px 16px', background: 'none', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#9a9ba4', borderRadius: '4px', cursor: 'pointer', fontFamily: "'JetBrains Mono', monospace", fontSize: '11px' }}
+              >
+                CANCEL
+              </button>
+              <button 
+                form="invoice-form" 
+                type="submit" 
+                style={{ 
+                  padding: '8px 20px', 
+                  backgroundColor: '#f5f5f7', 
+                  color: '#070709', 
+                  border: 'none', 
+                  borderRadius: '4px', 
+                  fontWeight: 600, 
+                  cursor: 'pointer',
+                  fontFamily: "'JetBrains Mono', monospace",
+                  fontSize: '11px',
+                  letterSpacing: '0.06em',
+                  textTransform: 'uppercase',
+                  boxShadow: '0 0 12px rgba(255, 255, 255, 0.1)'
+                }}
+              >
+                SAVE INVOICE RECORD
+              </button>
             </div>
           </div>
         </div>

@@ -5,7 +5,7 @@ const articles = [
     excerpt: 'A transparent breakdown of development costs, timelines, and the hidden factors that blow up budgets.',
     date: 'Jan 15, 2025',
     readTime: '8 min read',
-    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop&auto=format',
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=750&fit=crop&auto=format',
   },
   {
     tag: 'AI',
@@ -13,7 +13,7 @@ const articles = [
     excerpt: 'From Copilot to agent-based coding — the practical reality of building with AI in your workflow.',
     date: 'Jan 8, 2025',
     readTime: '6 min read',
-    image: 'https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=600&h=400&fit=crop&auto=format',
+    image: 'https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=1200&h=750&fit=crop&auto=format',
   },
   {
     tag: 'Case Study',
@@ -21,7 +21,7 @@ const articles = [
     excerpt: "The full inside story — architecture decisions, trade-offs, and what we'd do differently.",
     date: 'Dec 20, 2024',
     readTime: '11 min read',
-    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop&auto=format',
+    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=750&fit=crop&auto=format',
   },
   {
     tag: 'Engineering',
@@ -29,52 +29,55 @@ const articles = [
     excerpt: 'Hard-won insights on scoping, communication, architecture, and keeping momentum on product builds.',
     date: 'Dec 10, 2024',
     readTime: '9 min read',
-    image: 'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?w=600&h=400&fit=crop&auto=format',
+    image: 'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?w=1200&h=750&fit=crop&auto=format',
   },
 ]
 
-export default function Insights() {
+export default function Insights({ hideHeader = false }: { hideHeader?: boolean }) {
   return (
-    <section className="mobile-padded" style={{ background: 'linear-gradient(160deg, #08071a 0%, #0d0b22 40%, #0b0918 75%, #06050f 100%)', borderTop: '1px solid #232323' }}>
-      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '120px 40px' }}>
-        <div className="stack-mobile" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 56, flexWrap: 'wrap', gap: 24 }}>
-          <div>
-            <div className="section-label" style={{ marginBottom: 16 }}>Insights</div>
-            <h2 className="display-heading" style={{ fontSize: 'clamp(40px, 5vw, 64px)', color: 'white' }}>From the studio.</h2>
-          </div>
-          <button className="btn-ghost">View all articles →</button>
-        </div>
+    <section className="cf-section">
+      <div className="cf-shell">
+        {!hideHeader && (
+          <>
+            <div className="cf-bar">
+              <span><span className="cf-dot" />05 — Insights</span>
+              <span>{String(articles.length).padStart(2, '0')} Articles</span>
+            </div>
 
-        <div className="responsive-grid-2">
+            <div className="cf-head">
+              <h2 className="cf-h2">From the <em>studio.</em></h2>
+              <button className="cf-btn ghost">View all articles →</button>
+            </div>
+          </>
+        )}
+
+        <div className="cf-grid c2" style={hideHeader ? { borderTop: 'none' } : undefined}>
           {articles.map((article, i) => (
-            <div
-              key={i}
-              className="insight-card"
-            >
-              <div style={{ height: i === 0 ? 280 : 180, overflow: 'hidden', position: 'relative' }}>
+            <div key={i} className="cf-cell ticks hoverable" style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column' }}>
+              <div style={{ aspectRatio: '16 / 10', overflow: 'hidden', position: 'relative', borderBottom: '1px solid var(--cf-line)' }}>
                 <img
                   src={article.image}
                   alt={article.title}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s ease' }}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.7) saturate(0.85)', transition: 'transform 0.4s ease' }}
                   onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.04)')}
                   onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
                 />
-                <div style={{ position: 'absolute', top: 16, left: 16 }}>
-                  <span className="badge" style={{ fontSize: 10, padding: '3px 10px' }}>{article.tag}</span>
+                <div style={{ position: 'absolute', top: 14, left: 14 }}>
+                  <span className="cf-tag accent" style={{ background: 'rgba(17,17,19,0.85)' }}>{article.tag}</span>
                 </div>
               </div>
-              <div style={{ padding: 24 }}>
-                <h3 style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: i === 0 ? 22 : 17, color: 'white', marginBottom: 10, lineHeight: 1.3, letterSpacing: '-0.02em' }}>
-                  {article.title}
-                </h3>
-                <p style={{ fontSize: 14, color: '#a3a3a3', lineHeight: 1.6, marginBottom: 16, fontFamily: 'Inter' }}>
-                  {article.excerpt}
-                </p>
-                <div style={{ display: 'flex', gap: 16, fontSize: 12, color: '#555' }}>
+              <div style={{ padding: '24px 28px 28px' }}>
+                <div style={{ display: 'flex', gap: 12, fontFamily: 'var(--cf-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--cf-dim)', marginBottom: 12 }}>
                   <span>{article.date}</span>
-                  <span>·</span>
+                  <span>/</span>
                   <span>{article.readTime}</span>
                 </div>
+                <h3 style={{ fontFamily: 'var(--cf-sans)', fontWeight: 600, fontSize: i === 0 ? 24 : 20, color: '#fff', marginBottom: 10, lineHeight: 1.25, letterSpacing: '-0.03em' }}>
+                  {article.title}
+                </h3>
+                <p style={{ fontSize: 14, color: 'var(--cf-muted)', lineHeight: 1.65, fontFamily: 'Inter', margin: 0 }}>
+                  {article.excerpt}
+                </p>
               </div>
             </div>
           ))}

@@ -12,75 +12,48 @@ export default function Process() {
   const [active, setActive] = useState<number | null>(null)
 
   return (
-    <section className="mobile-padded" style={{ maxWidth: 1280, margin: '0 auto', padding: '120px 40px' }}>
-      <div style={{ marginBottom: 64 }}>
-        <div className="section-label" style={{ marginBottom: 16 }}>Our Process</div>
-        <h2 className="display-heading" style={{ fontSize: 'clamp(40px, 5vw, 64px)', color: 'white' }}>
-          How we deliver.
-        </h2>
-      </div>
+    <section className="cf-section">
+      <div className="cf-shell">
+        <div className="cf-bar">
+          <span><span className="cf-dot" />03 — Our Process</span>
+          <span>{String(stages.length).padStart(2, '0')} Stages</span>
+        </div>
 
-      <div className="responsive-grid-5" style={{ position: 'relative' }}>
-        {/* Connecting line (hidden on mobile) */}
-        <div
-          className="hide-mobile"
-          style={{
-            position: 'absolute', top: 28, left: '10%', right: '10%', height: 1,
-            background: 'linear-gradient(90deg, transparent, #232323 20%, #232323 80%, transparent)',
-            zIndex: 0,
-          }}
-        />
+        <div className="cf-head">
+          <h2 className="cf-h2">How we <em>deliver.</em></h2>
+        </div>
 
-        {stages.map((stage, i) => (
-          <div
-            key={i}
-            className="process-node"
-            onMouseEnter={() => setActive(i)}
-            onMouseLeave={() => setActive(null)}
-            style={{
-              display: 'flex', flexDirection: 'column', alignItems: 'center',
-              textAlign: 'center', padding: '0 12px', cursor: 'default',
-              position: 'relative', zIndex: 1,
-            }}
-          >
+        <div className="cf-grid c5">
+          {stages.map((stage, i) => (
             <div
-              style={{
-                width: 56, height: 56, borderRadius: '50%',
-                background: active === i ? 'rgba(171, 9, 36,0.2)' : '#161616',
-                border: active === i ? '1px solid rgba(171, 9, 36,0.5)' : '1px solid #232323',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 20, color: active === i ? '#ab0924' : '#555',
-                transition: 'all 0.3s ease',
-                boxShadow: active === i ? '0 0 24px rgba(171, 9, 36,0.3)' : 'none',
-                marginBottom: 20,
-              }}
+              key={i}
+              className="cf-cell ticks hoverable cf-cell-pad"
+              onMouseEnter={() => setActive(i)}
+              onMouseLeave={() => setActive(null)}
+              style={{ cursor: 'default', minHeight: 240 }}
             >
-              {stage.icon}
+              <div style={{ fontFamily: 'var(--cf-mono)', fontSize: 10, letterSpacing: '0.12em', color: active === i ? 'var(--cf-accent)' : 'var(--cf-dim)', marginBottom: 32, transition: 'color 0.25s' }}>
+                STEP {String(i + 1).padStart(2, '0')}
+              </div>
+              <div style={{ fontSize: 24, color: active === i ? 'var(--cf-accent)' : 'var(--cf-muted)', marginBottom: 14, transition: 'color 0.25s' }}>
+                {stage.icon}
+              </div>
+              <div style={{ fontFamily: 'var(--cf-sans)', fontWeight: 600, fontSize: 20, letterSpacing: '-0.03em', color: '#fff', marginBottom: 12 }}>
+                {stage.name}
+              </div>
+              <div
+                className="process-desc-mobile"
+                style={{
+                  fontSize: 13, color: 'var(--cf-muted)', lineHeight: 1.65, fontFamily: 'Inter',
+                  maxHeight: active === i ? 160 : 0, opacity: active === i ? 1 : 0,
+                  overflow: 'hidden', transition: 'all 0.4s ease',
+                }}
+              >
+                {stage.desc}
+              </div>
             </div>
-
-            <div
-              style={{
-                fontFamily: 'Outfit', fontWeight: 700, fontSize: 16,
-                color: active === i ? 'white' : '#a3a3a3',
-                marginBottom: 12, transition: 'color 0.3s',
-              }}
-            >
-              {stage.name}
-            </div>
-
-            <div
-              className="process-desc-mobile"
-              style={{
-                fontSize: 13, color: '#a3a3a3', lineHeight: 1.6, fontFamily: 'Inter',
-                maxHeight: active === i ? 120 : 0,
-                opacity: active === i ? 1 : 0,
-                overflow: 'hidden', transition: 'all 0.4s ease',
-              }}
-            >
-              {stage.desc}
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   )

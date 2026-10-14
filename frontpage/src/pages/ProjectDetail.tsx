@@ -1,28 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import FinalCTA from '../components/FinalCTA';
-
-type Project = {
-  id: string;
-  name: string;
-  companyName: string;
-  description: string;
-  country: string;
-  category: string;
-  tags: string[];
-  imageUrl: string;
-  websiteUrl: string;
-  projectInfo?: string;
-  challenges?: string;
-  outcome?: string;
-  scopeOfWork?: string;
-  gallery?: string[];
-  status?: string;
-  projectType?: string;
-  industry?: string;
-  platform?: string;
-  client?: { name: string };
-};
+import PageHero from '../components/PageHero';
+import { supabase, isSupabaseConfigured, normalizeProject, FALLBACK_PROJECTS } from '../lib/supabase';
+import type { Project } from '../lib/supabase';
 
 export default function ProjectDetail() {
   const { id } = useParams<{ id: string }>();
@@ -34,15 +15,31 @@ export default function ProjectDetail() {
     
     const fetchProject = async () => {
       try {
-        const configuredUrl = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
-        const apiUrl = configuredUrl.endsWith('/api') ? configuredUrl : `${configuredUrl.replace(/\/$/, '')}/api`;
-        const response = await fetch(`${apiUrl}/projects/${id}`);
-        if (response.ok) {
-          const data = await response.json();
-          setProject(data);
+        if (isSupabaseConfigured && id) {
+          const { data, error } = await supabase
+            .from('projects')
+            .select('*, client:clients(name)')
+            .eq('id', id)
+            .maybeSingle();
+
+          if (error) {
+            console.warn('Supabase fetch error, checking fallback projects:', error.message);
+            const found = FALLBACK_PROJECTS.find(p => p.id === id);
+            setProject(found || null);
+          } else if (data) {
+            setProject(normalizeProject(data));
+          } else {
+            const found = FALLBACK_PROJECTS.find(p => p.id === id);
+            setProject(found || null);
+          }
+        } else if (id) {
+          const found = FALLBACK_PROJECTS.find(p => p.id === id);
+          setProject(found || null);
         }
       } catch (error) {
-        console.error('Failed to fetch project', error);
+        console.error('Failed to fetch project, using fallback:', error);
+        const found = id ? FALLBACK_PROJECTS.find(p => p.id === id) : null;
+        setProject(found || null);
       } finally {
         setLoading(false);
       }
@@ -73,29 +70,29 @@ export default function ProjectDetail() {
   }
 
   return (
-    <div style={{ background: '#050505' }}>
+    <div style={{ background: 'var(--cf-bg)' }}>
       
       {/* Hero Section */}
-      <section className="mobile-padded" style={{ paddingTop: 160, paddingBottom: 64, paddingLeft: 20, paddingRight: 20, textAlign: 'center', maxWidth: 1080, margin: '0 auto' }}>
-        <Link to="/work" style={{ color: '#a3a3a3', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 40, fontSize: 14, fontFamily: 'Inter' }}>
-          ← Back to Work
-        </Link>
-        {project.client ? (
-          <div style={{ marginBottom: 16, color: '#ab0924', fontFamily: 'Outfit', fontWeight: 600, letterSpacing: '2px', textTransform: 'uppercase', fontSize: 14 }}>
-            Client: {project.client.name}
-          </div>
-        ) : project.companyName ? (
-          <div style={{ marginBottom: 16, color: '#ab0924', fontFamily: 'Outfit', fontWeight: 600, letterSpacing: '2px', textTransform: 'uppercase', fontSize: 14 }}>
-            {project.companyName}
-          </div>
-        ) : null}
-        <h1 className="display-heading" style={{ fontSize: 'clamp(40px, 6vw, 72px)', color: 'white', lineHeight: 1.1, marginBottom: 24, letterSpacing: '-2px' }}>
-          {project.name}
-        </h1>
-        <p style={{ fontSize: 20, color: '#a3a3a3', maxWidth: 700, margin: '0 auto', fontFamily: 'Inter', lineHeight: 1.6 }}>
-          {project.description}
-        </p>
-      </section>
+      <PageHero
+        label={project.client ? `Case Study — Client: ${project.client.name}` : project.companyName ? `Case Study — ${project.companyName}` : 'Case Study'}
+        meta="Selected work"
+        title={project.name}
+        lede={project.description}
+      >
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
+          <Link to="/work" className="cf-btn ghost sm">← Back to Work</Link>
+          {project.websiteUrl && (
+            <a href={project.websiteUrl} target="_blank" rel="noreferrer" className="cf-btn primary sm">
+              Visit Live Site ↗
+            </a>
+          )}
+          {project.optionalLinks && project.optionalLinks.map((link, idx) => (
+            <a key={idx} href={link.url} target="_blank" rel="noreferrer" className="cf-btn ghost sm">
+              {link.label} ↗
+            </a>
+          ))}
+        </div>
+      </PageHero>
 
       {/* Main Cover Image */}
       <section style={{ width: '100%', minHeight: '60vh', overflow: 'hidden' }}>

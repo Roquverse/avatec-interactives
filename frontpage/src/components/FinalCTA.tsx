@@ -1,44 +1,50 @@
 export default function FinalCTA() {
   return (
-    <section className="mobile-padded" style={{ maxWidth: 1280, margin: '0 auto', padding: '120px 40px' }}>
-      <div className="final-cta-box" style={{ position: 'relative', background: '#101010', border: '1px solid #232323', borderRadius: 32, padding: '80px', overflow: 'hidden' }}>
-        <div className="glow-orb" style={{ position: 'absolute', width: 600, height: 400, background: 'rgba(171, 9, 36,0.08)', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }} />
-        <div className="grid-bg" style={{ position: 'absolute', inset: 0, opacity: 0.5 }} />
+    <section className="cf-section">
+      <div className="cf-shell">
+        <div className="cf-bar">
+          <span><span className="cf-dot" />Let's build together</span>
+          <span className="hide-mobile">Reply within 24h</span>
+        </div>
 
-        <div className="responsive-grid-2" style={{ position: 'relative', zIndex: 1, alignItems: 'start' }}>
+        <div className="cf-grid c2" style={{ borderTop: 'none', position: 'relative' }}>
+          <div className="cf-gridbg" />
+
           {/* Left */}
-          <div>
-            <div className="badge" style={{ marginBottom: 24 }}>Let's build together</div>
-            <h2 className="display-heading" style={{ fontSize: 'clamp(40px, 5vw, 64px)', color: 'white', marginBottom: 20 }}>
-              Have an idea worth building?
+          <div className="cf-cell" style={{ background: 'transparent', padding: '72px clamp(24px, 4vw, 64px)' }}>
+            <h2 className="cf-h2" style={{ marginBottom: 20 }}>
+              Have an idea worth <em>building?</em>
             </h2>
-            <p style={{ fontSize: 17, color: '#a3a3a3', lineHeight: 1.8, fontFamily: 'Inter', marginBottom: 40 }}>
+            <p className="cf-lede" style={{ marginBottom: 36, fontSize: 16 }}>
               Let's turn it into a scalable product. Tell us what you're building and we'll get back to you within 24 hours.
             </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
               {['Strategy call in 48 hours', 'Fixed-price or retainer — your choice', 'No NDAs required to start the conversation'].map((point, i) => (
                 <div key={i} style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-                  <div style={{ width: 20, height: 20, borderRadius: '50%', background: 'rgba(34,197,94,0.15)', border: '1px solid rgba(34,197,94,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth={3}><path d="M20 6L9 17l-5-5" /></svg>
-                  </div>
-                  <span style={{ fontSize: 14, color: '#a3a3a3', fontFamily: 'Inter' }}>{point}</span>
+                  <span className="cf-tag green" style={{ padding: '2px 5px' }}>
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3}><path d="M20 6L9 17l-5-5" /></svg>
+                  </span>
+                  <span style={{ fontSize: 14, color: 'var(--cf-muted)', fontFamily: 'Inter' }}>{point}</span>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Right — Calendly CTA */}
-          <div style={{ background: '#161616', border: '1px solid #232323', borderRadius: 20, padding: 36 }}>
-            <h3 style={{ fontFamily: 'Outfit', fontWeight: 700, fontSize: 20, color: 'white', marginBottom: 16 }}>Book your session</h3>
-            <p style={{ fontSize: 14, color: '#a3a3a3', fontFamily: 'Inter', marginBottom: 28, lineHeight: 1.6 }}>
+          <div className="cf-cell ticks" style={{ padding: '72px clamp(24px, 4vw, 64px)', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            <div style={{ fontFamily: 'var(--cf-mono)', fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--cf-dim)', marginBottom: 16 }}>
+              30 min / Free
+            </div>
+            <h3 style={{ fontFamily: 'var(--cf-sans)', fontWeight: 600, fontSize: 26, letterSpacing: '-0.03em', color: '#fff', marginBottom: 14 }}>Book your session</h3>
+            <p style={{ fontSize: 14, color: 'var(--cf-muted)', fontFamily: 'Inter', marginBottom: 28, lineHeight: 1.65 }}>
               Choose a time that works for you. We'll discuss your idea, technical requirements, and how we can help you build it.
             </p>
-            <a 
-              href="https://calendly.com/helpdesk-avatecinteractives/30min" 
-              target="_blank" 
+            <a
+              href="https://calendly.com/helpdesk-avatecinteractives/30min"
+              target="_blank"
               rel="noopener noreferrer"
-              className="btn-primary" 
-              style={{ width: '100%', justifyContent: 'center', padding: '16px', fontSize: 15, textDecoration: 'none', display: 'flex' }}
+              className="cf-btn block"
+              style={{ padding: 16 }}
             >
               Schedule on Calendly →
             </a>
