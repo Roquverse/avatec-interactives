@@ -23,7 +23,7 @@ export default function PageHero({
   const tail = i === -1 ? title : title.slice(i + 1)
 
   return (
-    <section style={{ paddingTop: 52 }}>
+    <section style={{ paddingTop: 58 }}>
       <div className="cf-shell" style={{ borderTop: 'none' }}>
         <div className="cf-bar">
           <span><span className="cf-dot" />{label}</span>

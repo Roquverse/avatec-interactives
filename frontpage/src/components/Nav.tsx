@@ -51,7 +51,7 @@ export default function Nav() {
         <div
           className="show-mobile-flex"
           style={{
-            position: 'absolute', top: 52, left: 0, right: 0,
+            position: 'absolute', top: '100%', left: 0, right: 0,
             background: 'var(--cf-bg)', borderBottom: '1px solid var(--cf-line)',
             padding: '8px 20px 20px', flexDirection: 'column',
           }}

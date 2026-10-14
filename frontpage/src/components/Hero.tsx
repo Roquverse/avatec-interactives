@@ -8,7 +8,7 @@ export default function Hero() {
   ]
 
   return (
-    <section className="cf-hero" style={{ paddingTop: 52, position: 'relative' }}>
+    <section className="cf-hero" style={{ paddingTop: 58, position: 'relative' }}>
       <div className="cf-shell full">
         <div className="cf-bar">
           <span><span className="cf-dot" />Avatec Interactives</span>
